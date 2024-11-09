@@ -37,7 +37,6 @@
             label4 = new Label();
             label3 = new Label();
             groupBox2 = new GroupBox();
-            lblMerchandise = new Label();
             lblDonators = new Label();
             lblCampaigners = new Label();
             lblTurns = new Label();
@@ -66,6 +65,7 @@
             label13 = new Label();
             groupBox6 = new GroupBox();
             listActionLog = new ListBox();
+            lblStateElectors = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -110,6 +110,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(lblStateElectors);
             groupBox1.Controls.Add(lblStatePolling);
             groupBox1.Controls.Add(lblNationalPolls);
             groupBox1.Controls.Add(label4);
@@ -169,7 +170,6 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(lblMerchandise);
             groupBox2.Controls.Add(lblDonators);
             groupBox2.Controls.Add(lblCampaigners);
             groupBox2.Controls.Add(lblTurns);
@@ -182,16 +182,6 @@
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
             groupBox2.Text = "Information";
-            // 
-            // lblMerchandise
-            // 
-            lblMerchandise.AutoSize = true;
-            lblMerchandise.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblMerchandise.Location = new Point(6, 199);
-            lblMerchandise.Name = "lblMerchandise";
-            lblMerchandise.Size = new Size(190, 30);
-            lblMerchandise.TabIndex = 5;
-            lblMerchandise.Text = "Merchandise sales:";
             // 
             // lblDonators
             // 
@@ -287,6 +277,7 @@
             btnGetResults.TabIndex = 8;
             btnGetResults.Text = "Results";
             btnGetResults.UseVisualStyleBackColor = true;
+            btnGetResults.Click += btnGetResults_Click;
             // 
             // menuStrip1
             // 
@@ -383,6 +374,7 @@
             btnCampaigner.TabIndex = 10;
             btnCampaigner.Text = "Campaigner: $2000";
             btnCampaigner.UseVisualStyleBackColor = true;
+            btnCampaigner.Click += btnCampaigner_Click;
             // 
             // groupBox5
             // 
@@ -471,6 +463,17 @@
             listActionLog.Size = new Size(1325, 124);
             listActionLog.TabIndex = 10;
             // 
+            // lblStateElectors
+            // 
+            lblStateElectors.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblStateElectors.AutoSize = true;
+            lblStateElectors.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStateElectors.Location = new Point(361, 167);
+            lblStateElectors.Name = "lblStateElectors";
+            lblStateElectors.Size = new Size(108, 30);
+            lblStateElectors.TabIndex = 6;
+            lblStateElectors.Text = "Electors: 0";
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -522,7 +525,6 @@
         private Label lblNationalPolls;
         private Label lblStatePolling;
         private Label lblCampaigners;
-        private Label lblMerchandise;
         private Label lblDonators;
         private GroupBox groupBox4;
         private Button btnEndTurn;
@@ -547,5 +549,6 @@
         private Label label5;
         private Label label2;
         private Label label1;
+        private Label lblStateElectors;
     }
 }

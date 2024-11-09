@@ -14,7 +14,6 @@ namespace Win538Electors
             { "Ads", 4000 },
             { "Campaigner", 2000 },
             { "Donators", 1000 },
-            { "SuperPAC", 15000 }
         };
     }
 }
