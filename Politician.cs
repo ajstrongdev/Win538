@@ -13,7 +13,7 @@ namespace Win538Electors
         public int turns = 52;
         public int campaigners = 0;
         public int donators = 0;
-        public int superpacs = 0;
+        public int sales = 0;
         public int electorsWon = 0;
     }
 }

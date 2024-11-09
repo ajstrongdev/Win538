@@ -1,5 +1,3 @@
-using Microsoft.VisualBasic;
-
 namespace Win538Electors
 {
     public partial class Form1 : Form
@@ -20,6 +18,9 @@ namespace Win538Electors
                 "West Virginia", "Wisconsin", "Wyoming"
         };
         Dictionary<string, int> statePolling = new Dictionary<string, int>();
+        double rallyCostIncrease = 1.2;
+        double adsCostIncrease = 1.3;
+        double donationCostIncrease = 1.05;
         public Form1()
         {
             InitializeComponent();
@@ -79,9 +80,11 @@ namespace Win538Electors
             lblParty.Text = $"Party: {player.party}";
             lblCampaigners.Text = $"Campaigners: {player.campaigners}";
             lblDonators.Text = $"Donators: {player.donators}";
-            lblSuperPACs.Text = $"SuperPACs: {player.superpacs}";
+            lblMerchandise.Text = $"Merchandise sales: {player.sales}";
             lblResultsYou.Text = $"{player.electorsWon}";
             lblResultsAI.Text = $"0"; // Change this to use ai.electorsWon when the class has been created here.
+            btnRally.Text = $"Rally: ${playerCampaign.campaignType["Rally"]}";
+            btnDonator.Text = $"Donator: ${playerCampaign.campaignType["Donators"]}";
             if (player.party == "Democratic Party")
             {
                 lblParty.ForeColor = Color.Blue;
@@ -105,6 +108,8 @@ namespace Win538Electors
             {
                 GameUI(true);
                 btnGetResults.Enabled = true;
+                btnEndTurn.Enabled = false;
+                btnDonator.Enabled = false;
             }
 
         }
@@ -119,22 +124,16 @@ namespace Win538Electors
             {
                 btnAdvertisements.Enabled = false;
                 btnCampaigner.Enabled = false;
-                btnDonator.Enabled = false;
                 btnRally.Enabled = false;
-                btnSuperPAC.Enabled = false;
+                btnCampaigner.Enabled = false;
+                //btnSuperPAC.Enabled = false;
                 btnEndTurn.Enabled = true;
             }
             else
             {
                 btnAdvertisements.Enabled = true;
                 btnCampaigner.Enabled = true;
-                btnDonator.Enabled = true;
                 btnRally.Enabled = true;
-                if (player.turns < 37)
-                {
-                    btnSuperPAC.Enabled = true; // Enable if early game (first 16 turns) is complete.
-                }
-                btnEndTurn.Enabled = false;
             }
         }
 
@@ -145,11 +144,35 @@ namespace Win538Electors
             mnuSelectParty.Enabled = false;
         }
 
+        private void mnuRepublican_Click(object sender, EventArgs e)
+        {
+            player.party = "Republican Party";
+            UpdateGameStatistics();
+            mnuSelectParty.Enabled = false;
+        }
+
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
+
             player.turns = player.turns - 1;
+            int donationsCount = 0;
+            // Count donations
+            Enumerable.Range(0, player.donators).ToList().ForEach(i =>
+            {
+                Random rand = new Random();
+                int donated = rand.Next(350, 501);
+                donationsCount += donated;
+            });
+            if (donationsCount > 0)
+            {
+                player.funds += donationsCount;
+                ActionLog(true, $"secured ${donationsCount} of funding this turn from your {player.donators} donators.");
+            }
             UpdateGameStatistics();
-            GameUI(false);
+            if (player.turns != 0)
+            {
+                GameUI(false);
+            }
         }
 
         private void btnCampaignRally_Click(object sender, EventArgs e)
@@ -160,10 +183,11 @@ namespace Win538Electors
                 if (player.funds >= cost)
                 {
                     GameUI(true);
-                    player.funds = player.funds - 10000;
+                    player.funds = player.funds - cost;
                     string selected = listStates.SelectedItem.ToString().Trim();
-                   statePolling[selected] = statePolling[selected] + 3;
-                   ActionLog(true, $"Held a campaign rally in {selected}, increasing your polling by: +3");
+                    statePolling[selected] = statePolling[selected] + 4;
+                    ActionLog(true, $"Held a campaign rally in {selected}, increasing your polling by: +4");
+                    playerCampaign.campaignType["Rally"] = Convert.ToInt32(cost * rallyCostIncrease);
                 }
                 else
                 {
@@ -181,12 +205,55 @@ namespace Win538Electors
         {
             if (!isPlayer)
             {
-                listActionLog.Items.Add($"Computer: {action}");
+                listActionLog.Items.Insert(0, $"Computer: {action}");
             }
             else
             {
-                listActionLog.Items.Add($"You: {action}");
+                listActionLog.Items.Insert(0, $"You: {action}");
             }
+        }
+
+        private void btnDonator_Click(object sender, EventArgs e)
+        {
+            int cost = playerCampaign.campaignType["Donators"];
+            if (player.funds >= cost)
+            {
+                player.funds = player.funds - cost;
+                ActionLog(true, $"Purchased a donator.");
+                player.donators += 1;
+                playerCampaign.campaignType["Donators"] = Convert.ToInt32(cost * donationCostIncrease);
+            }
+            else
+            {
+                MessageBox.Show("Not enough funds.", "Warning: Insufficient funds");
+            }
+            UpdateGameStatistics();
+        }
+
+        private void btnAdvertisements_Click(object sender, EventArgs e)
+        {
+            int cost = playerCampaign.campaignType["Ads"];
+            if (listStates.SelectedIndex != -1) // Make sure a user has a state selected when campaigning
+            {
+                if (player.funds >= cost)
+                {
+                    GameUI(true);
+                    player.funds = player.funds - cost;
+                    string selected = listStates.SelectedItem.ToString().Trim();
+                    statePolling[selected] = statePolling[selected] + 2;
+                    ActionLog(true, $"Placed TV Advertisements in {selected}, increasing your polling by: +2");
+                    playerCampaign.campaignType["Ads"] = Convert.ToInt32(cost * adsCostIncrease);
+                }
+                else
+                {
+                    MessageBox.Show("Not enough campaign points", "Warning: Insufficient funds");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select a state to campaign in");
+            }
+            UpdateGameStatistics();
         }
 
     }

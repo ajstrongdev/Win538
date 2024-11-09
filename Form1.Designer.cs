@@ -37,14 +37,13 @@
             label4 = new Label();
             label3 = new Label();
             groupBox2 = new GroupBox();
-            lblSuperPACs = new Label();
+            lblMerchandise = new Label();
             lblDonators = new Label();
             lblCampaigners = new Label();
             lblTurns = new Label();
             lblFunds = new Label();
             lblParty = new Label();
             groupBox4 = new GroupBox();
-            btnSuperPAC = new Button();
             btnDonator = new Button();
             btnEndTurn = new Button();
             btnGetResults = new Button();
@@ -60,8 +59,10 @@
             btnAdvertisements = new Button();
             btnCampaigner = new Button();
             groupBox5 = new GroupBox();
+            label5 = new Label();
+            label2 = new Label();
+            label1 = new Label();
             label15 = new Label();
-            label14 = new Label();
             label13 = new Label();
             groupBox6 = new GroupBox();
             listActionLog = new ListBox();
@@ -168,7 +169,7 @@
             // 
             // groupBox2
             // 
-            groupBox2.Controls.Add(lblSuperPACs);
+            groupBox2.Controls.Add(lblMerchandise);
             groupBox2.Controls.Add(lblDonators);
             groupBox2.Controls.Add(lblCampaigners);
             groupBox2.Controls.Add(lblTurns);
@@ -177,20 +178,20 @@
             groupBox2.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox2.Location = new Point(188, 278);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(319, 252);
+            groupBox2.Size = new Size(319, 266);
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
             groupBox2.Text = "Information";
             // 
-            // lblSuperPACs
+            // lblMerchandise
             // 
-            lblSuperPACs.AutoSize = true;
-            lblSuperPACs.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblSuperPACs.Location = new Point(6, 199);
-            lblSuperPACs.Name = "lblSuperPACs";
-            lblSuperPACs.Size = new Size(136, 30);
-            lblSuperPACs.TabIndex = 5;
-            lblSuperPACs.Text = "SuperPACS: 3";
+            lblMerchandise.AutoSize = true;
+            lblMerchandise.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblMerchandise.Location = new Point(6, 199);
+            lblMerchandise.Name = "lblMerchandise";
+            lblMerchandise.Size = new Size(190, 30);
+            lblMerchandise.TabIndex = 5;
+            lblMerchandise.Text = "Merchandise sales:";
             // 
             // lblDonators
             // 
@@ -245,7 +246,6 @@
             // 
             // groupBox4
             // 
-            groupBox4.Controls.Add(btnSuperPAC);
             groupBox4.Controls.Add(btnDonator);
             groupBox4.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox4.Location = new Point(525, 477);
@@ -254,16 +254,6 @@
             groupBox4.TabIndex = 6;
             groupBox4.TabStop = false;
             groupBox4.Text = "Fundraising";
-            // 
-            // btnSuperPAC
-            // 
-            btnSuperPAC.Font = new Font("Noto Sans", 10.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            btnSuperPAC.Location = new Point(422, 57);
-            btnSuperPAC.Name = "btnSuperPAC";
-            btnSuperPAC.Size = new Size(173, 91);
-            btnSuperPAC.TabIndex = 14;
-            btnSuperPAC.Text = "SuperPAC: $15000";
-            btnSuperPAC.UseVisualStyleBackColor = true;
             // 
             // btnDonator
             // 
@@ -274,6 +264,7 @@
             btnDonator.TabIndex = 13;
             btnDonator.Text = "Donator: $1000";
             btnDonator.UseVisualStyleBackColor = true;
+            btnDonator.Click += btnDonator_Click;
             // 
             // btnEndTurn
             // 
@@ -341,6 +332,7 @@
             mnuRepublican.Name = "mnuRepublican";
             mnuRepublican.Size = new Size(205, 26);
             mnuRepublican.Text = "Republican Party";
+            mnuRepublican.Click += mnuRepublican_Click;
             // 
             // toolStripMenuItem1
             // 
@@ -378,8 +370,9 @@
             btnAdvertisements.Name = "btnAdvertisements";
             btnAdvertisements.Size = new Size(173, 91);
             btnAdvertisements.TabIndex = 11;
-            btnAdvertisements.Text = "Advertisements: $6500";
+            btnAdvertisements.Text = "Advertisements: $4000";
             btnAdvertisements.UseVisualStyleBackColor = true;
+            btnAdvertisements.Click += btnAdvertisements_Click;
             // 
             // btnCampaigner
             // 
@@ -388,13 +381,15 @@
             btnCampaigner.Name = "btnCampaigner";
             btnCampaigner.Size = new Size(173, 91);
             btnCampaigner.TabIndex = 10;
-            btnCampaigner.Text = "Campaigner: $3000";
+            btnCampaigner.Text = "Campaigner: $2000";
             btnCampaigner.UseVisualStyleBackColor = true;
             // 
             // groupBox5
             // 
+            groupBox5.Controls.Add(label5);
+            groupBox5.Controls.Add(label2);
+            groupBox5.Controls.Add(label1);
             groupBox5.Controls.Add(label15);
-            groupBox5.Controls.Add(label14);
             groupBox5.Controls.Add(label13);
             groupBox5.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox5.Location = new Point(1144, 40);
@@ -404,25 +399,45 @@
             groupBox5.TabStop = false;
             groupBox5.Text = "Useful info:";
             // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label5.Location = new Point(5, 337);
+            label5.Name = "label5";
+            label5.Size = new Size(174, 40);
+            label5.TabIndex = 11;
+            label5.Text = "Holding a rally will generate\r\n+4 polling in a state.";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label2.Location = new Point(5, 273);
+            label2.Name = "label2";
+            label2.Size = new Size(197, 40);
+            label2.TabIndex = 10;
+            label2.Text = "An advertisement will generate \r\n+2 polling in a state.";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            label1.Location = new Point(6, 202);
+            label1.Name = "label1";
+            label1.Size = new Size(184, 60);
+            label1.TabIndex = 9;
+            label1.Text = "Campaigners will generate \r\n+1 polling for a random state \r\nper turn.";
+            // 
             // label15
             // 
             label15.AutoSize = true;
             label15.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label15.Location = new Point(6, 176);
+            label15.Location = new Point(5, 108);
             label15.Name = "label15";
             label15.Size = new Size(173, 80);
             label15.TabIndex = 8;
             label15.Text = "This game uses polling to\r\ndeclare each state, then the\r\nelectoral college votes are\r\nallocated.";
-            // 
-            // label14
-            // 
-            label14.AutoSize = true;
-            label14.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label14.Location = new Point(6, 117);
-            label14.Name = "label14";
-            label14.Size = new Size(160, 40);
-            label14.TabIndex = 7;
-            label14.Text = "SuperPACs will donate \r\n$3500-6000 every 8 turns.";
             // 
             // label13
             // 
@@ -430,9 +445,9 @@
             label13.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
             label13.Location = new Point(6, 55);
             label13.Name = "label13";
-            label13.Size = new Size(178, 40);
+            label13.Size = new Size(177, 40);
             label13.TabIndex = 6;
-            label13.Text = "Donators generate between\r\n$350 and $500 every 3 turns.";
+            label13.Text = "Donators generate between\r\n$350 and $500 every turn.";
             // 
             // groupBox6
             // 
@@ -452,6 +467,7 @@
             listActionLog.ItemHeight = 30;
             listActionLog.Location = new Point(0, 39);
             listActionLog.Name = "listActionLog";
+            listActionLog.ScrollAlwaysVisible = true;
             listActionLog.Size = new Size(1325, 124);
             listActionLog.TabIndex = 10;
             // 
@@ -506,7 +522,7 @@
         private Label lblNationalPolls;
         private Label lblStatePolling;
         private Label lblCampaigners;
-        private Label lblSuperPACs;
+        private Label lblMerchandise;
         private Label lblDonators;
         private GroupBox groupBox4;
         private Button btnEndTurn;
@@ -519,16 +535,17 @@
         private ToolStripMenuItem mnuRepublican;
         private GroupBox groupBox3;
         private Button btnCampaigner;
-        private Button btnSuperPAC;
         private Button btnDonator;
         private Button btnRally;
         private Button btnAdvertisements;
         private GroupBox groupBox5;
-        private Label label14;
         private Label label13;
         private GroupBox groupBox6;
         private ListBox listActionLog;
         private Label label15;
         private ToolStripMenuItem toolStripMenuItem1;
+        private Label label5;
+        private Label label2;
+        private Label label1;
     }
 }
