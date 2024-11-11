@@ -32,6 +32,7 @@
             lblResultsAI = new Label();
             lblResultsYou = new Label();
             groupBox1 = new GroupBox();
+            lblStateElectors = new Label();
             lblStatePolling = new Label();
             lblNationalPolls = new Label();
             label4 = new Label();
@@ -65,7 +66,12 @@
             label13 = new Label();
             groupBox6 = new GroupBox();
             listActionLog = new ListBox();
-            lblStateElectors = new Label();
+            groupBox7 = new GroupBox();
+            lblFundsAI = new Label();
+            lblDonatorsAI = new Label();
+            lblCampaignersAI = new Label();
+            groupBox8 = new GroupBox();
+            listActionLogAI = new ListBox();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -73,6 +79,8 @@
             groupBox3.SuspendLayout();
             groupBox5.SuspendLayout();
             groupBox6.SuspendLayout();
+            groupBox7.SuspendLayout();
+            groupBox8.SuspendLayout();
             SuspendLayout();
             // 
             // listStates
@@ -124,6 +132,17 @@
             groupBox1.TabIndex = 3;
             groupBox1.TabStop = false;
             groupBox1.Text = "Results";
+            // 
+            // lblStateElectors
+            // 
+            lblStateElectors.Anchor = AnchorStyles.Left | AnchorStyles.Right;
+            lblStateElectors.AutoSize = true;
+            lblStateElectors.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblStateElectors.Location = new Point(361, 167);
+            lblStateElectors.Name = "lblStateElectors";
+            lblStateElectors.Size = new Size(108, 30);
+            lblStateElectors.TabIndex = 6;
+            lblStateElectors.Text = "Electors: 0";
             // 
             // lblStatePolling
             // 
@@ -240,7 +259,7 @@
             groupBox4.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox4.Location = new Point(525, 477);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(613, 164);
+            groupBox4.Size = new Size(203, 164);
             groupBox4.TabIndex = 6;
             groupBox4.TabStop = false;
             groupBox4.Text = "Fundraising";
@@ -447,10 +466,10 @@
             groupBox6.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
             groupBox6.Location = new Point(12, 650);
             groupBox6.Name = "groupBox6";
-            groupBox6.Size = new Size(1331, 163);
+            groupBox6.Size = new Size(645, 163);
             groupBox6.TabIndex = 8;
             groupBox6.TabStop = false;
-            groupBox6.Text = "Action Log:";
+            groupBox6.Text = "Your Action Log:";
             // 
             // listActionLog
             // 
@@ -460,25 +479,81 @@
             listActionLog.Location = new Point(0, 39);
             listActionLog.Name = "listActionLog";
             listActionLog.ScrollAlwaysVisible = true;
-            listActionLog.Size = new Size(1325, 124);
+            listActionLog.Size = new Size(639, 124);
             listActionLog.TabIndex = 10;
             // 
-            // lblStateElectors
+            // groupBox7
             // 
-            lblStateElectors.Anchor = AnchorStyles.Left | AnchorStyles.Right;
-            lblStateElectors.AutoSize = true;
-            lblStateElectors.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblStateElectors.Location = new Point(361, 167);
-            lblStateElectors.Name = "lblStateElectors";
-            lblStateElectors.Size = new Size(108, 30);
-            lblStateElectors.TabIndex = 6;
-            lblStateElectors.Text = "Electors: 0";
+            groupBox7.Controls.Add(lblFundsAI);
+            groupBox7.Controls.Add(lblDonatorsAI);
+            groupBox7.Controls.Add(lblCampaignersAI);
+            groupBox7.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox7.Location = new Point(746, 480);
+            groupBox7.Name = "groupBox7";
+            groupBox7.Size = new Size(392, 164);
+            groupBox7.TabIndex = 14;
+            groupBox7.TabStop = false;
+            groupBox7.Text = "AI";
+            // 
+            // lblFundsAI
+            // 
+            lblFundsAI.AutoSize = true;
+            lblFundsAI.Font = new Font("Noto Sans", 12F);
+            lblFundsAI.Location = new Point(6, 40);
+            lblFundsAI.Name = "lblFundsAI";
+            lblFundsAI.Size = new Size(145, 30);
+            lblFundsAI.TabIndex = 5;
+            lblFundsAI.Text = "Funds: $10000";
+            // 
+            // lblDonatorsAI
+            // 
+            lblDonatorsAI.AutoSize = true;
+            lblDonatorsAI.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDonatorsAI.Location = new Point(6, 102);
+            lblDonatorsAI.Name = "lblDonatorsAI";
+            lblDonatorsAI.Size = new Size(132, 30);
+            lblDonatorsAI.TabIndex = 6;
+            lblDonatorsAI.Text = "Donators: 12";
+            // 
+            // lblCampaignersAI
+            // 
+            lblCampaignersAI.AutoSize = true;
+            lblCampaignersAI.Font = new Font("Noto Sans", 12F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblCampaignersAI.Location = new Point(6, 70);
+            lblCampaignersAI.Name = "lblCampaignersAI";
+            lblCampaignersAI.Size = new Size(169, 30);
+            lblCampaignersAI.TabIndex = 5;
+            lblCampaignersAI.Text = "Campaigners: 30";
+            // 
+            // groupBox8
+            // 
+            groupBox8.Controls.Add(listActionLogAI);
+            groupBox8.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            groupBox8.Location = new Point(689, 650);
+            groupBox8.Name = "groupBox8";
+            groupBox8.Size = new Size(645, 163);
+            groupBox8.TabIndex = 11;
+            groupBox8.TabStop = false;
+            groupBox8.Text = "Computer Action Log:";
+            // 
+            // listActionLogAI
+            // 
+            listActionLogAI.Font = new Font("Noto Sans", 12F);
+            listActionLogAI.FormattingEnabled = true;
+            listActionLogAI.ItemHeight = 30;
+            listActionLogAI.Location = new Point(0, 39);
+            listActionLogAI.Name = "listActionLogAI";
+            listActionLogAI.ScrollAlwaysVisible = true;
+            listActionLogAI.Size = new Size(639, 124);
+            listActionLogAI.TabIndex = 10;
             // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(1355, 817);
+            Controls.Add(groupBox8);
+            Controls.Add(groupBox7);
             Controls.Add(groupBox6);
             Controls.Add(groupBox5);
             Controls.Add(groupBox3);
@@ -506,6 +581,9 @@
             groupBox5.ResumeLayout(false);
             groupBox5.PerformLayout();
             groupBox6.ResumeLayout(false);
+            groupBox7.ResumeLayout(false);
+            groupBox7.PerformLayout();
+            groupBox8.ResumeLayout(false);
             ResumeLayout(false);
             PerformLayout();
         }
@@ -550,5 +628,11 @@
         private Label label2;
         private Label label1;
         private Label lblStateElectors;
+        private GroupBox groupBox7;
+        private Label lblFundsAI;
+        private Label lblDonatorsAI;
+        private Label lblCampaignersAI;
+        private GroupBox groupBox8;
+        private ListBox listActionLogAI;
     }
 }

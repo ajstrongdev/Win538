@@ -86,10 +86,13 @@ namespace Win538Electors
                 }
             }
             lblFunds.Text = $"Funds: ${player.funds.ToString()}";
+            lblFundsAI.Text = $"Funds: ${ai.funds.ToString()}";
             lblTurns.Text = $"Turns left: {player.turns.ToString()}/52";
             lblParty.Text = $"Party: {player.party}";
             lblCampaigners.Text = $"Campaigners: {player.campaigners}";
+            lblCampaignersAI.Text = $"Campaigners: {ai.campaigners}";
             lblDonators.Text = $"Donators: {player.donators}";
+            lblDonatorsAI.Text = $"Donators: {ai.donators}";
             lblResultsYou.Text = $"{player.electorsWon}";
             lblResultsAI.Text = $"{ai.electorsWon}"; // Change this to use ai.electorsWon when the class has been created here.
             btnRally.Text = $"Rally: ${playerCampaign.campaignType["Rally"]}";
@@ -184,7 +187,8 @@ namespace Win538Electors
             if (player.turns != 0)
             {
                 GameUI(false);
-            } else
+            }
+            else
             {
                 GameUI(true);
                 btnGetResults.Enabled = true;
@@ -192,6 +196,7 @@ namespace Win538Electors
                 btnDonator.Enabled = false;
             }
             listActionLog.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
+            listActionLogAI.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
         }
 
         private void btnCampaignRally_Click(object sender, EventArgs e)
@@ -224,7 +229,7 @@ namespace Win538Electors
         {
             if (!isPlayer)
             {
-                listActionLog.Items.Insert(0, $"Computer: {action}");
+                listActionLogAI.Items.Insert(0, $"The Computer: {action}");
             }
             else
             {
@@ -302,26 +307,26 @@ namespace Win538Electors
                 if (statePolling[state] < 0)
                 {
                     ai.electorsWon = ai.electorsWon + electors.electoralVotes[state];
-                    ActionLog(false, $"won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                    ActionLog(false, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
                 }
                 else if (statePolling[state] > 0)
                 {
                     player.electorsWon = player.electorsWon + electors.electoralVotes[state];
-                    ActionLog(true, $"won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                    ActionLog(true, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
                 }
                 else if (statePolling[state] == 0)
                 {
                     Random rand = new Random();
-                    int swingStateWinner = rand.Next(0, 1);
+                    int swingStateWinner = rand.Next(0, 2);
                     if (swingStateWinner == 0)
                     {
                         ai.electorsWon = ai.electorsWon + electors.electoralVotes[state];
-                        ActionLog(false, $"won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                        ActionLog(false, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
                     }
-                    else
+                    else if (swingStateWinner == 1)
                     {
                         player.electorsWon = player.electorsWon + electors.electoralVotes[state];
-                        ActionLog(true, $"won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                        ActionLog(true, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
                     }
                 }
                 UpdateGameStatistics();
@@ -375,8 +380,15 @@ namespace Win538Electors
             }
 
             Random randomState = new Random();
-            string selectedState = statesLosing[randomState.Next(statesLosing.Length)];
-            if (ai.funds > aiCampaign.campaignType["Rally"])
+            string selectedState;
+            if (statesLosing.Length > 0)
+            {
+                selectedState = statesLosing[randomState.Next(statesLosing.Length)];
+            } else
+            {
+                selectedState = states[randomState.Next(states.Length)];
+            }
+                if (ai.funds > aiCampaign.campaignType["Rally"])
             {
                 ai.funds = ai.funds - aiCampaign.campaignType["Rally"];
                 statePolling[selectedState] = statePolling[selectedState] - 4;
@@ -400,12 +412,16 @@ namespace Win538Electors
                 aiCampaign.campaignType["Campaigner"] = Convert.ToInt32(aiCampaign.campaignType["Campaigner"] * campaignerCostIncrease);
                 return;
             }
-            else
+            else if (ai.funds > aiCampaign.campaignType["Donators"])
             {
                 ai.funds = ai.funds - aiCampaign.campaignType["Donators"];
                 ActionLog(false, $"Purchased a donator.");
                 ai.donators += 1;
                 aiCampaign.campaignType["Donators"] = Convert.ToInt32(aiCampaign.campaignType["Donators"] * donationCostIncrease);
+                return;
+            } else
+            {
+                ActionLog(false, "Skipped their turn, having no money to make an action.");
                 return;
             }
         }
