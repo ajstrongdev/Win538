@@ -38,6 +38,7 @@
             label4 = new Label();
             label3 = new Label();
             groupBox2 = new GroupBox();
+            lblRaceCall = new Label();
             lblDonators = new Label();
             lblCampaigners = new Label();
             lblTurns = new Label();
@@ -50,6 +51,9 @@
             menuStrip1 = new MenuStrip();
             optionsToolStripMenuItem = new ToolStripMenuItem();
             aboutToolStripMenuItem = new ToolStripMenuItem();
+            viewToolStripMenuItem = new ToolStripMenuItem();
+            mnuAllStates = new ToolStripMenuItem();
+            mnuStatesLosing = new ToolStripMenuItem();
             mnuSelectParty = new ToolStripMenuItem();
             mnuDemocrat = new ToolStripMenuItem();
             mnuRepublican = new ToolStripMenuItem();
@@ -88,7 +92,7 @@
             listStates.Font = new Font("Noto Sans", 12F);
             listStates.FormattingEnabled = true;
             listStates.ItemHeight = 30;
-            listStates.Location = new Point(12, 40);
+            listStates.Location = new Point(9, 40);
             listStates.Name = "listStates";
             listStates.Size = new Size(150, 604);
             listStates.TabIndex = 0;
@@ -126,7 +130,7 @@
             groupBox1.Controls.Add(lblResultsYou);
             groupBox1.Controls.Add(lblResultsAI);
             groupBox1.Font = new Font("Noto Sans", 16F);
-            groupBox1.Location = new Point(188, 40);
+            groupBox1.Location = new Point(185, 40);
             groupBox1.Name = "groupBox1";
             groupBox1.Size = new Size(950, 232);
             groupBox1.TabIndex = 3;
@@ -189,18 +193,30 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(lblRaceCall);
             groupBox2.Controls.Add(lblDonators);
             groupBox2.Controls.Add(lblCampaigners);
             groupBox2.Controls.Add(lblTurns);
             groupBox2.Controls.Add(lblFunds);
             groupBox2.Controls.Add(lblParty);
             groupBox2.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox2.Location = new Point(188, 278);
+            groupBox2.Location = new Point(185, 278);
             groupBox2.Name = "groupBox2";
             groupBox2.Size = new Size(319, 266);
             groupBox2.TabIndex = 4;
             groupBox2.TabStop = false;
             groupBox2.Text = "Information";
+            // 
+            // lblRaceCall
+            // 
+            lblRaceCall.AutoSize = true;
+            lblRaceCall.BackColor = Color.LightGray;
+            lblRaceCall.Font = new Font("Noto Sans", 16.2F);
+            lblRaceCall.Location = new Point(10, 202);
+            lblRaceCall.Name = "lblRaceCall";
+            lblRaceCall.Size = new Size(277, 42);
+            lblRaceCall.TabIndex = 15;
+            lblRaceCall.Text = "Campaign on-going";
             // 
             // lblDonators
             // 
@@ -257,7 +273,7 @@
             // 
             groupBox4.Controls.Add(btnDonator);
             groupBox4.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox4.Location = new Point(525, 477);
+            groupBox4.Location = new Point(522, 477);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(203, 164);
             groupBox4.TabIndex = 6;
@@ -278,7 +294,7 @@
             // btnEndTurn
             // 
             btnEndTurn.Font = new Font("Noto Sans", 10.2F);
-            btnEndTurn.Location = new Point(188, 550);
+            btnEndTurn.Location = new Point(185, 550);
             btnEndTurn.Name = "btnEndTurn";
             btnEndTurn.Size = new Size(148, 91);
             btnEndTurn.TabIndex = 7;
@@ -290,7 +306,7 @@
             // 
             btnGetResults.Enabled = false;
             btnGetResults.Font = new Font("Noto Sans", 10.2F);
-            btnGetResults.Location = new Point(359, 550);
+            btnGetResults.Location = new Point(356, 550);
             btnGetResults.Name = "btnGetResults";
             btnGetResults.Size = new Size(148, 91);
             btnGetResults.TabIndex = 8;
@@ -310,7 +326,7 @@
             // 
             // optionsToolStripMenuItem
             // 
-            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem });
+            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, viewToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.Size = new Size(75, 24);
             optionsToolStripMenuItem.Text = "Options";
@@ -320,6 +336,27 @@
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
             aboutToolStripMenuItem.Size = new Size(133, 26);
             aboutToolStripMenuItem.Text = "About";
+            // 
+            // viewToolStripMenuItem
+            // 
+            viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mnuAllStates, mnuStatesLosing });
+            viewToolStripMenuItem.Name = "viewToolStripMenuItem";
+            viewToolStripMenuItem.Size = new Size(133, 26);
+            viewToolStripMenuItem.Text = "View";
+            // 
+            // mnuAllStates
+            // 
+            mnuAllStates.Name = "mnuAllStates";
+            mnuAllStates.Size = new Size(176, 26);
+            mnuAllStates.Text = "All states";
+            mnuAllStates.Click += mnuAllStates_Click;
+            // 
+            // mnuStatesLosing
+            // 
+            mnuStatesLosing.Name = "mnuStatesLosing";
+            mnuStatesLosing.Size = new Size(176, 26);
+            mnuStatesLosing.Text = "States losing";
+            mnuStatesLosing.Click += mnuStatesLosing_Click;
             // 
             // mnuSelectParty
             // 
@@ -355,7 +392,7 @@
             groupBox3.Controls.Add(btnAdvertisements);
             groupBox3.Controls.Add(btnCampaigner);
             groupBox3.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox3.Location = new Point(525, 278);
+            groupBox3.Location = new Point(522, 278);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(613, 164);
             groupBox3.TabIndex = 7;
@@ -403,7 +440,7 @@
             groupBox5.Controls.Add(label15);
             groupBox5.Controls.Add(label13);
             groupBox5.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox5.Location = new Point(1144, 40);
+            groupBox5.Location = new Point(1141, 40);
             groupBox5.Name = "groupBox5";
             groupBox5.Size = new Size(199, 601);
             groupBox5.TabIndex = 7;
@@ -464,7 +501,7 @@
             // 
             groupBox6.Controls.Add(listActionLog);
             groupBox6.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox6.Location = new Point(12, 650);
+            groupBox6.Location = new Point(9, 650);
             groupBox6.Name = "groupBox6";
             groupBox6.Size = new Size(645, 163);
             groupBox6.TabIndex = 8;
@@ -488,7 +525,7 @@
             groupBox7.Controls.Add(lblDonatorsAI);
             groupBox7.Controls.Add(lblCampaignersAI);
             groupBox7.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox7.Location = new Point(746, 480);
+            groupBox7.Location = new Point(743, 480);
             groupBox7.Name = "groupBox7";
             groupBox7.Size = new Size(392, 164);
             groupBox7.TabIndex = 14;
@@ -529,7 +566,7 @@
             // 
             groupBox8.Controls.Add(listActionLogAI);
             groupBox8.Font = new Font("Noto Sans", 16.2F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            groupBox8.Location = new Point(689, 650);
+            groupBox8.Location = new Point(686, 650);
             groupBox8.Name = "groupBox8";
             groupBox8.Size = new Size(645, 163);
             groupBox8.TabIndex = 11;
@@ -551,7 +588,7 @@
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(1355, 817);
+            ClientSize = new Size(1355, 822);
             Controls.Add(groupBox8);
             Controls.Add(groupBox7);
             Controls.Add(groupBox6);
@@ -565,7 +602,6 @@
             Controls.Add(listStates);
             Controls.Add(menuStrip1);
             MainMenuStrip = menuStrip1;
-            MaximumSize = new Size(1373, 864);
             MinimumSize = new Size(1373, 864);
             Name = "Form1";
             Text = "Form1";
@@ -634,5 +670,9 @@
         private Label lblCampaignersAI;
         private GroupBox groupBox8;
         private ListBox listActionLogAI;
+        private ToolStripMenuItem viewToolStripMenuItem;
+        private ToolStripMenuItem mnuAllStates;
+        private ToolStripMenuItem mnuStatesLosing;
+        private Label lblRaceCall;
     }
 }

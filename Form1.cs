@@ -29,6 +29,8 @@ namespace Win538Electors
         double donationCostIncrease = 1.05;
         double campaignerCostIncrease = 1.05;
         int turnsTaken = 1;
+        bool showAllStates = true;
+        bool switchedViewState = false;
         public Form1()
         {
             InitializeComponent();
@@ -117,6 +119,66 @@ namespace Win538Electors
                 lblResultsYou.ForeColor = Color.Black;
                 lblResultsAI.ForeColor = Color.Black;
             }
+
+            if (switchedViewState == true)
+            {
+                if (showAllStates == true)
+                {
+                    listStates.Items.Clear();
+                    foreach (string state in states)
+                    {
+                        listStates.Items.Add(state);
+                    }
+                } else
+                {
+                    listStates.Items.Clear();
+                    string[] losingStates = statePolling // This will get the states in which the AI is losing in currently
+                        .Where(state => state.Value < 0)
+                        .Select(state => state.Key)
+                        .ToArray();
+                    foreach (string state in losingStates)
+                    {
+                        listStates.Items.Add(state);
+                    }
+                }
+                switchedViewState = false;
+            }
+
+            if (player.turns == 0)
+            {
+                lblRaceCall.Text = "Race yet to be called.";
+            }
+
+            if (player.electorsWon > 269)
+            {
+                if (player.party == "Democratic Party")
+                {
+                    lblRaceCall.BackColor = Color.Blue;
+                    lblRaceCall.ForeColor = Color.White;
+                } else
+                {
+                    lblRaceCall.BackColor = Color.Red;
+                    lblRaceCall.ForeColor = Color.White;
+                }
+                lblRaceCall.Text = "You've won this race.";
+            } else if (ai.electorsWon > 269)
+            {
+                if (player.party == "Democratic Party")
+                {
+                    lblRaceCall.BackColor = Color.Red;
+                    lblRaceCall.ForeColor = Color.White;
+                }
+                else
+                {
+                    lblRaceCall.BackColor = Color.Blue;
+                    lblRaceCall.ForeColor = Color.White;
+                }
+                lblRaceCall.Text = "You've lost this race.";
+            } else if (ai.electorsWon == 269 && player.electorsWon == 269)
+            {
+                lblRaceCall.Text = "Electoral college tie.";
+            }
+
         }
         private void listStates_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -159,6 +221,10 @@ namespace Win538Electors
 
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
+            if (showAllStates == false)
+            {
+                switchedViewState = true;
+            }
             turnsTaken += 1;
             player.turns = player.turns - 1;
             int donationsCount = 0;
@@ -187,6 +253,7 @@ namespace Win538Electors
             if (player.turns != 0)
             {
                 GameUI(false);
+                lblRaceCall.Text = "This race is yet to be called.";
             }
             else
             {
@@ -384,11 +451,12 @@ namespace Win538Electors
             if (statesLosing.Length > 0)
             {
                 selectedState = statesLosing[randomState.Next(statesLosing.Length)];
-            } else
+            }
+            else
             {
                 selectedState = states[randomState.Next(states.Length)];
             }
-                if (ai.funds > aiCampaign.campaignType["Rally"])
+            if (ai.funds > aiCampaign.campaignType["Rally"])
             {
                 ai.funds = ai.funds - aiCampaign.campaignType["Rally"];
                 statePolling[selectedState] = statePolling[selectedState] - 4;
@@ -419,11 +487,26 @@ namespace Win538Electors
                 ai.donators += 1;
                 aiCampaign.campaignType["Donators"] = Convert.ToInt32(aiCampaign.campaignType["Donators"] * donationCostIncrease);
                 return;
-            } else
+            }
+            else
             {
                 ActionLog(false, "Skipped their turn, having no money to make an action.");
                 return;
             }
+        }
+
+        private void mnuAllStates_Click(object sender, EventArgs e)
+        {
+            switchedViewState = true;
+            showAllStates = true;
+            UpdateGameStatistics();
+        }
+
+        private void mnuStatesLosing_Click(object sender, EventArgs e)
+        {
+            switchedViewState = true;
+            showAllStates = false;
+            UpdateGameStatistics();
         }
     }
 }
