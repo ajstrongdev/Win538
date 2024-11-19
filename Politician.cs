@@ -10,7 +10,7 @@ namespace Win538Electors
     {
         public string party = "Independent";
         public int funds = 10000;
-        public int turns = 1;
+        public int turns = 52;
         public int campaigners = 0;
         public int donators = 1;
         public int sales = 0;

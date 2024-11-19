@@ -253,7 +253,6 @@ namespace Win538Electors
             if (player.turns != 0)
             {
                 GameUI(false);
-                lblRaceCall.Text = "This race is yet to be called.";
             }
             else
             {
