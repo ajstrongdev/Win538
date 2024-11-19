@@ -8,12 +8,17 @@ namespace Win538Electors
 {
     internal class Campaign
     {
-        public Dictionary<string, int> campaignType = new Dictionary<string, int>()
+        public Dictionary<string, int> campaignType;
+
+        public Campaign()
         {
-            { "Rally", 10000 },
-            { "Ads", 4000 },
-            { "Campaigner", 2000 },
-            { "Donators", 1000 },
-        };
+            campaignType = new Dictionary<string, int>
+                {
+                    { "Rally", 10000 },
+                    { "Ads", 4000 },
+                    { "Campaigner", 2000 },
+                    { "Donators", 1000 }
+                };
+        }
     }
 }

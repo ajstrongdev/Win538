@@ -8,12 +8,22 @@ namespace Win538Electors
 {
     internal class Politician
     {
-        public string party = "Independent";
-        public int funds = 10000;
-        public int turns = 52;
-        public int campaigners = 0;
-        public int donators = 1;
-        public int sales = 0;
-        public int electorsWon = 0;
+        public string party;
+        public int funds;
+        public int turns;
+        public int campaigners;
+        public int donators;
+        public int sales;
+        public int electorsWon;
+        public Politician()
+        {
+            party = "Independent";
+            funds = 10000;
+            turns = 52;
+            campaigners = 0;
+            donators = 1;
+            sales = 0;
+            electorsWon = 0;
+        }
     }
 }
