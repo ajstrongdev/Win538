@@ -9,7 +9,6 @@ namespace Win538Electors
         Campaign playerCampaign = new Campaign();
         Politician ai = new Politician();
         Campaign aiCampaign = new Campaign();
-        ElectoralCollege electors = new ElectoralCollege();
         string[] states = new string[]
         {
                 "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -23,7 +22,60 @@ namespace Win538Electors
                 "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
                 "West Virginia", "Wisconsin", "Wyoming"
         };
-        Dictionary<string, int> statePolling = new Dictionary<string, int>();
+        Dictionary<string,int> electoralVotes = new Dictionary<string, int> {
+                { "Alabama", 9 },
+                { "Alaska", 3 },
+                { "Arizona", 11 },
+                { "Arkansas", 6 },
+                { "California", 54 },
+                { "Colorado", 10 },
+                { "Connecticut", 7 },
+                { "Delaware", 3 },
+                { "District of Columbia", 3 },
+                { "Florida", 30 },
+                { "Georgia", 16 },
+                { "Hawaii", 4 },
+                { "Idaho", 4 },
+                { "Illinois", 19 },
+                { "Indiana", 11 },
+                { "Iowa", 6 },
+                { "Kansas", 6 },
+                { "Kentucky", 8 },
+                { "Louisiana", 8 },
+                { "Maine", 4 },
+                { "Maryland", 10 },
+                { "Massachusetts", 11 },
+                { "Michigan", 15 },
+                { "Minnesota", 10 },
+                { "Mississippi", 6 },
+                { "Missouri", 10 },
+                { "Montana", 4 },
+                { "Nebraska", 5 },
+                { "Nevada", 6 },
+                { "New Hampshire", 4 },
+                { "New Jersey", 14 },
+                { "New Mexico", 5 },
+                { "New York", 28 },
+                { "North Carolina", 16 },
+                { "North Dakota", 3 },
+                { "Ohio", 17 },
+                { "Oklahoma", 7 },
+                { "Oregon", 8 },
+                { "Pennsylvania", 19 },
+                { "Rhode Island", 4 },
+                { "South Carolina", 9 },
+                { "South Dakota", 3 },
+                { "Tennessee", 11 },
+                { "Texas", 40 },
+                { "Utah", 6 },
+                { "Vermont", 3 },
+                { "Virginia", 13 },
+                { "Washington", 12 },
+                { "West Virginia", 4 },
+                { "Wisconsin", 10 },
+                { "Wyoming", 3 },
+            };
+    Dictionary<string, int> statePolling = new Dictionary<string, int>();
         double rallyCostIncrease = 1.2;
         double adsCostIncrease = 1.3;
         double donationCostIncrease = 1.05;
@@ -64,7 +116,7 @@ namespace Win538Electors
             if (listStates.SelectedIndex != -1) // If an item is selected.
             {
                 string selected = listStates.SelectedItem.ToString().Trim();
-                lblStateElectors.Text = $"Electors: {electors.electoralVotes[selected]}";
+                lblStateElectors.Text = $"Electors: {electoralVotes[selected]}";
                 if (statePolling[selected] > 0)
                 {
                     lblStatePolling.Text = $"{selected} polling: +{statePolling[selected]}"; // The if statement is literally here only to render "+" if polling positive.
@@ -372,13 +424,13 @@ namespace Win538Electors
                 await Task.Delay(1000);
                 if (statePolling[state] < 0)
                 {
-                    ai.electorsWon = ai.electorsWon + electors.electoralVotes[state];
-                    ActionLog(false, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                    ai.electorsWon = ai.electorsWon + electoralVotes[state];
+                    ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                 }
                 else if (statePolling[state] > 0)
                 {
-                    player.electorsWon = player.electorsWon + electors.electoralVotes[state];
-                    ActionLog(true, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                    player.electorsWon = player.electorsWon + electoralVotes[state];
+                    ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                 }
                 else if (statePolling[state] == 0)
                 {
@@ -386,13 +438,13 @@ namespace Win538Electors
                     int swingStateWinner = rand.Next(0, 2);
                     if (swingStateWinner == 0)
                     {
-                        ai.electorsWon = ai.electorsWon + electors.electoralVotes[state];
-                        ActionLog(false, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                        ai.electorsWon = ai.electorsWon + electoralVotes[state];
+                        ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                     }
                     else if (swingStateWinner == 1)
                     {
-                        player.electorsWon = player.electorsWon + electors.electoralVotes[state];
-                        ActionLog(true, $"Won {state} with its {electors.electoralVotes[state]} electoral college votes.");
+                        player.electorsWon = player.electorsWon + electoralVotes[state];
+                        ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                     }
                 }
                 UpdateGameStatistics();
