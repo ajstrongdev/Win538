@@ -139,27 +139,27 @@ namespace Win538Electors
                     lblNationalPolls.Text = $"National polling: {nationalPolls}";
                 }
             }
-            lblFunds.Text = $"Funds: ${player.funds.ToString()}";
-            lblFundsAI.Text = $"Funds: ${ai.funds.ToString()}";
-            lblTurns.Text = $"Turns left: {player.turns.ToString()}/52";
-            lblParty.Text = $"Party: {player.party}";
-            lblCampaigners.Text = $"Campaigners: {player.campaigners}";
-            lblCampaignersAI.Text = $"Campaigners: {ai.campaigners}";
-            lblDonators.Text = $"Donators: {player.donators}";
-            lblDonatorsAI.Text = $"Donators: {ai.donators}";
-            lblResultsYou.Text = $"{player.electorsWon}";
-            lblResultsAI.Text = $"{ai.electorsWon}"; // Change this to use ai.electorsWon when the class has been created here.
-            btnRally.Text = $"Rally: ${playerCampaign.campaignType["Rally"]}";
-            btnDonator.Text = $"Donator: ${playerCampaign.campaignType["Donators"]}";
-            btnCampaigner.Text = $"Campaigner: ${playerCampaign.campaignType["Campaigner"]}";
-            btnAdvertisements.Text = $"Advertisements: ${playerCampaign.campaignType["Ads"]}";
-            if (player.party == "Democratic Party")
+            lblFunds.Text = $"Funds: ${player.GetFunds().ToString()}";
+            lblFundsAI.Text = $"Funds: ${ai.GetFunds().ToString()}";
+            lblTurns.Text = $"Turns left: {player.GetTurns().ToString()}/52";
+            lblParty.Text = $"Party: {player.GetParty()}";
+            lblCampaigners.Text = $"Campaigners: {player.GetCampaigners()}";
+            lblCampaignersAI.Text = $"Campaigners: {ai.GetCampaigners()}";
+            lblDonators.Text = $"Donators: {player.GetDonators()}";
+            lblDonatorsAI.Text = $"Donators: {ai.GetDonators()}";
+            lblResultsYou.Text = $"{player.GetElectors()}";
+            lblResultsAI.Text = $"{ai.GetElectors()}"; // Change this to use ai.electorsWon when the class has been created here.
+            btnRally.Text = $"Rally: ${playerCampaign.GetCampaignCost("Rally")}";
+            btnDonator.Text = $"Donator: ${playerCampaign.GetCampaignCost("Donators")}";
+            btnCampaigner.Text = $"Campaigner: ${playerCampaign.GetCampaignCost("Campaigner")}";
+            btnAdvertisements.Text = $"Advertisements: ${playerCampaign.GetCampaignCost("Ads")}";
+            if (player.GetParty() == "Democratic Party")
             {
                 lblParty.ForeColor = Color.Blue;
                 lblResultsYou.ForeColor = Color.Blue;
                 lblResultsAI.ForeColor = Color.Red;
             }
-            else if (player.party == "Republican Party")
+            else if (player.GetParty() == "Republican Party")
             {
                 lblParty.ForeColor = Color.Red;
                 lblResultsYou.ForeColor = Color.Red;
@@ -196,14 +196,14 @@ namespace Win538Electors
                 switchedViewState = false;
             }
 
-            if (player.turns == 0)
+            if (player.GetTurns() == 0)
             {
                 lblRaceCall.Text = "Race yet to be called.";
             }
 
-            if (player.electorsWon > 269)
+            if (player.GetElectors() > 269)
             {
-                if (player.party == "Democratic Party")
+                if (player.GetParty() == "Democratic Party")
                 {
                     lblRaceCall.BackColor = Color.Blue;
                     lblRaceCall.ForeColor = Color.White;
@@ -213,9 +213,9 @@ namespace Win538Electors
                     lblRaceCall.ForeColor = Color.White;
                 }
                 lblRaceCall.Text = "You've won this race.";
-            } else if (ai.electorsWon > 269)
+            } else if (ai.GetElectors() > 269)
             {
-                if (player.party == "Democratic Party")
+                if (player.GetParty() == "Democratic Party")
                 {
                     lblRaceCall.BackColor = Color.Red;
                     lblRaceCall.ForeColor = Color.White;
@@ -226,7 +226,7 @@ namespace Win538Electors
                     lblRaceCall.ForeColor = Color.White;
                 }
                 lblRaceCall.Text = "You've lost this race.";
-            } else if (ai.electorsWon == 269 && player.electorsWon == 269)
+            } else if (ai.GetElectors() == 269 && player.GetElectors() == 269)
             {
                 lblRaceCall.Text = "Electoral college tie.";
             }
@@ -259,14 +259,14 @@ namespace Win538Electors
 
         private void mnuDemocrat_Click(object sender, EventArgs e)
         {
-            player.party = "Democratic Party";
+            player.SetParty("Democratic Party");
             UpdateGameStatistics();
             mnuSelectParty.Enabled = false;
         }
 
         private void mnuRepublican_Click(object sender, EventArgs e)
         {
-            player.party = "Republican Party";
+            player.SetParty("Republican Party");
             UpdateGameStatistics();
             mnuSelectParty.Enabled = false;
         }
@@ -278,17 +278,17 @@ namespace Win538Electors
                 switchedViewState = true;
             }
             turnsTaken += 1;
-            player.turns = player.turns - 1;
+            player.SetTurns();
             int donationsCount = 0;
             // Count donations
-            Enumerable.Range(0, player.donators).ToList().ForEach(i =>
+            Enumerable.Range(0, player.GetDonators()).ToList().ForEach(i =>
             {
                 Random rand = new Random();
                 int donated = rand.Next(350, 501);
                 donationsCount += donated;
             });
             // Increase polling by +1 per campaigner for a random state (per campaigner)
-            Enumerable.Range(0, player.campaigners).ToList().ForEach(i =>
+            Enumerable.Range(0, player.GetCampaigners()).ToList().ForEach(i =>
             {
                 Random rand = new Random();
                 int stateChosen = rand.Next(0, 50);
@@ -297,12 +297,12 @@ namespace Win538Electors
             });
             if (donationsCount > 0)
             {
-                player.funds += donationsCount;
-                ActionLog(true, $"secured ${donationsCount} of funding this turn from your {player.donators} donators.");
+                player.SetFundsIncrease(donationsCount);
+                ActionLog(true, $"secured ${donationsCount} of funding this turn from your {player.GetDonators()} donators.");
             }
             ComputerTurn();
             UpdateGameStatistics();
-            if (player.turns != 0)
+            if (player.GetTurns() != 0)
             {
                 GameUI(false);
             }
@@ -319,17 +319,17 @@ namespace Win538Electors
 
         private void btnCampaignRally_Click(object sender, EventArgs e)
         {
-            int cost = playerCampaign.campaignType["Rally"];
+            int cost = playerCampaign.GetCampaignCost("Rally");
             if (listStates.SelectedIndex != -1) // Make sure a user has a state selected when campaigning
             {
-                if (player.funds >= cost)
+                if (player.GetFunds() >= cost)
                 {
                     GameUI(true);
-                    player.funds = player.funds - cost;
+                    player.SetFundsPurchase(cost);
                     string selected = listStates.SelectedItem.ToString().Trim();
                     statePolling[selected] = statePolling[selected] + 4;
                     ActionLog(true, $"Held a campaign rally in {selected}, increasing your polling by: +4");
-                    playerCampaign.campaignType["Rally"] = Convert.ToInt32(cost * rallyCostIncrease);
+                    playerCampaign.SetCampaignCost("Rally", Convert.ToInt32(cost * rallyCostIncrease));
                 }
                 else
                 {
@@ -357,13 +357,13 @@ namespace Win538Electors
 
         private void btnDonator_Click(object sender, EventArgs e)
         {
-            int cost = playerCampaign.campaignType["Donators"];
-            if (player.funds >= cost)
+            int cost = playerCampaign.GetCampaignCost("Donators");
+            if (player.GetFunds() >= cost)
             {
-                player.funds = player.funds - cost;
+                player.SetFundsPurchase(cost);
                 ActionLog(true, $"Purchased a donator.");
-                player.donators += 1;
-                playerCampaign.campaignType["Donators"] = Convert.ToInt32(cost * donationCostIncrease);
+                player.SetDonators();
+                playerCampaign.SetCampaignCost("Donators", Convert.ToInt32(cost * donationCostIncrease));
             }
             else
             {
@@ -375,17 +375,17 @@ namespace Win538Electors
 
         private void btnAdvertisements_Click(object sender, EventArgs e)
         {
-            int cost = playerCampaign.campaignType["Ads"];
+            int cost = playerCampaign.GetCampaignCost("Ads");
             if (listStates.SelectedIndex != -1) // Make sure a user has a state selected when campaigning
             {
-                if (player.funds >= cost)
+                if (player.GetFunds() >= cost)
                 {
                     GameUI(true);
-                    player.funds = player.funds - cost;
+                    player.SetFundsPurchase(cost);
                     string selected = listStates.SelectedItem.ToString().Trim();
                     statePolling[selected] = statePolling[selected] + 2;
                     ActionLog(true, $"Placed TV Advertisements in {selected}, increasing your polling by: +2");
-                    playerCampaign.campaignType["Ads"] = Convert.ToInt32(cost * adsCostIncrease);
+                    playerCampaign.SetCampaignCost("Ads", Convert.ToInt32(cost * adsCostIncrease));
                 }
                 else
                 {
@@ -401,14 +401,14 @@ namespace Win538Electors
 
         private void btnCampaigner_Click(object sender, EventArgs e)
         {
-            int cost = playerCampaign.campaignType["Campaigner"];
-            if (player.funds >= cost)
+            int cost = playerCampaign.GetCampaignCost("Campaigner");
+            if (player.GetFunds() >= cost)
             {
                 GameUI(true);
-                player.funds = player.funds - cost;
+                player.SetFundsPurchase(cost);
                 ActionLog(true, $"You purchased a campaigner.");
-                player.campaigners += 1;
-                playerCampaign.campaignType["Campaigner"] = Convert.ToInt32(cost * campaignerCostIncrease);
+                player.SetCampaigners();
+                playerCampaign.SetCampaignCost("Campaigner", Convert.ToInt32(cost * campaignerCostIncrease));
             }
             else
             {
@@ -424,12 +424,12 @@ namespace Win538Electors
                 await Task.Delay(1000);
                 if (statePolling[state] < 0)
                 {
-                    ai.electorsWon = ai.electorsWon + electoralVotes[state];
+                    ai.SetElectors(electoralVotes[state]);
                     ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                 }
                 else if (statePolling[state] > 0)
                 {
-                    player.electorsWon = player.electorsWon + electoralVotes[state];
+                    player.SetElectors(electoralVotes[state]);
                     ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                 }
                 else if (statePolling[state] == 0)
@@ -438,12 +438,12 @@ namespace Win538Electors
                     int swingStateWinner = rand.Next(0, 2);
                     if (swingStateWinner == 0)
                     {
-                        ai.electorsWon = ai.electorsWon + electoralVotes[state];
+                        ai.SetElectors(electoralVotes[state]);
                         ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                     }
                     else if (swingStateWinner == 1)
                     {
-                        player.electorsWon = player.electorsWon + electoralVotes[state];
+                        player.SetElectors(electoralVotes[state]);
                         ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
                     }
                 }
@@ -461,7 +461,7 @@ namespace Win538Electors
         {
             int donationsCount = 0;
             // Count donations for the computer
-            Enumerable.Range(0, ai.donators).ToList().ForEach(i =>
+            Enumerable.Range(0, ai.GetDonators()).ToList().ForEach(i =>
             {
                 Random rand = new Random();
                 int donated = rand.Next(350, 501);
@@ -469,10 +469,10 @@ namespace Win538Electors
             });
             if (donationsCount > 0)
             {
-                ai.funds += donationsCount;
+                ai.SetFundsIncrease(donationsCount);
             }
             // Decrease (increase for the computer) polling by -1 per campaigner for a random state (per campaigner)
-            Enumerable.Range(0, ai.campaigners).ToList().ForEach(i =>
+            Enumerable.Range(0, ai.GetCampaigners()).ToList().ForEach(i =>
             {
                 Random rand = new Random();
                 int stateChosen = rand.Next(0, 50);
@@ -485,14 +485,14 @@ namespace Win538Electors
                 .Where(state => state.Value > 0)
                 .Select(state => state.Key)
                 .ToArray();
-            if ((ai.funds < aiCampaign.campaignType["Rally"] && ai.funds < aiCampaign.campaignType["Ads"] && ai.funds < aiCampaign.campaignType["Campaigner"] && ai.funds < aiCampaign.campaignType["Donators"]) || ai.donators < 2)
+            if ((ai.GetFunds() < aiCampaign.GetCampaignCost("Rally") && ai.GetFunds() < aiCampaign.GetCampaignCost("Ads") && ai.GetFunds() < aiCampaign.GetCampaignCost("Campaigner") && ai.GetFunds() < aiCampaign.GetCampaignCost("Donators")) || ai.GetDonators() < 2)
             {
-                if (ai.funds > aiCampaign.campaignType["Donators"])
+                if (ai.GetFunds() > aiCampaign.GetCampaignCost("Donators"))
                 {
-                    ai.funds = ai.funds - aiCampaign.campaignType["Donators"];
+                    ai.SetFundsPurchase(aiCampaign.GetCampaignCost("Donators"));
                     ActionLog(false, $"Purchased a donator.");
-                    ai.donators += 1;
-                    aiCampaign.campaignType["Donators"] = Convert.ToInt32(aiCampaign.campaignType["Donators"] * donationCostIncrease);
+                    ai.SetDonators();
+                    aiCampaign.SetCampaignCost("Donators", Convert.ToInt32(aiCampaign.GetCampaignCost("Donators") * donationCostIncrease));
                     return;
                 }
             }
@@ -507,36 +507,36 @@ namespace Win538Electors
             {
                 selectedState = states[randomState.Next(states.Length)];
             }
-            if (ai.funds > aiCampaign.campaignType["Rally"])
+            if (ai.GetFunds() > aiCampaign.GetCampaignCost("Rally"))
             {
-                ai.funds = ai.funds - aiCampaign.campaignType["Rally"];
+                ai.SetFundsPurchase(aiCampaign.GetCampaignCost("Rally"));
                 statePolling[selectedState] = statePolling[selectedState] - 4;
                 ActionLog(false, $"Held a campaign rally in {selectedState}, decreasing your polling by: -4");
-                aiCampaign.campaignType["Rally"] = Convert.ToInt32(aiCampaign.campaignType["Rally"] * rallyCostIncrease);
+                aiCampaign.SetCampaignCost("Rally", Convert.ToInt32(aiCampaign.GetCampaignCost("Rally") * rallyCostIncrease));
                 return;
             }
-            else if (ai.funds > aiCampaign.campaignType["Ads"])
+            else if (ai.GetFunds() > aiCampaign.GetCampaignCost("Ads"))
             {
-                ai.funds = ai.funds - aiCampaign.campaignType["Ads"];
+                ai.SetFundsPurchase(aiCampaign.GetCampaignCost("Ads"));
                 statePolling[selectedState] = statePolling[selectedState] - 2;
                 ActionLog(false, $"Placed TV Advertisements in {selectedState}, decreasing your polling by: -2");
-                aiCampaign.campaignType["Ads"] = Convert.ToInt32(aiCampaign.campaignType["Ads"] * rallyCostIncrease);
+                aiCampaign.SetCampaignCost("Ads", Convert.ToInt32(aiCampaign.GetCampaignCost("Ads") * rallyCostIncrease));
                 return;
             }
-            else if (ai.funds > aiCampaign.campaignType["Campaigner"])
+            else if (ai.GetFunds() > aiCampaign.GetCampaignCost("Campaigner"))
             {
-                ai.funds = ai.funds - aiCampaign.campaignType["Campaigner"];
+                ai.SetFundsPurchase(aiCampaign.GetCampaignCost("Campaigner"));
                 ActionLog(false, $"Purchased a campaigner.");
-                ai.campaigners += 1;
-                aiCampaign.campaignType["Campaigner"] = Convert.ToInt32(aiCampaign.campaignType["Campaigner"] * campaignerCostIncrease);
+                ai.SetCampaigners();
+                aiCampaign.SetCampaignCost("Campaigner", Convert.ToInt32(aiCampaign.GetCampaignCost("Campaigner") * campaignerCostIncrease));
                 return;
             }
-            else if (ai.funds > aiCampaign.campaignType["Donators"])
+            else if (ai.GetFunds() > aiCampaign.GetCampaignCost("Donators"))
             {
-                ai.funds = ai.funds - aiCampaign.campaignType["Donators"];
+                ai.SetFundsPurchase(aiCampaign.GetCampaignCost("Donators"));
                 ActionLog(false, $"Purchased a donator.");
-                ai.donators += 1;
-                aiCampaign.campaignType["Donators"] = Convert.ToInt32(aiCampaign.campaignType["Donators"] * donationCostIncrease);
+                ai.SetDonators();
+                aiCampaign.SetCampaignCost("Donators", Convert.ToInt32(aiCampaign.GetCampaignCost("Donators") * donationCostIncrease));
                 return;
             }
             else
