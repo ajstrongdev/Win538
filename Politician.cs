@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Win538Electors
 {
-    internal class Politician
+    internal class Politician : Campaign
     {
         private string party;
         private int funds;
