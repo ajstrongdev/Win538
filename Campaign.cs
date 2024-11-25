@@ -8,12 +8,27 @@ namespace Win538Electors
 {
     internal class Campaign
     {
-        public Dictionary<string, int> campaignType = new Dictionary<string, int>()
+        private Dictionary<string, int> campaignType;
+        // Getters
+        public int GetCampaignCost(string type)
         {
-            { "Rally", 10000 },
-            { "Ads", 4000 },
-            { "Campaigner", 2000 },
-            { "Donators", 1000 },
-        };
+            return campaignType[type];
+        }
+        // Setters
+        public void SetCampaignCost(string type, int newCost)
+        {
+            campaignType[type] = newCost;
+        }
+        // Constructors
+        public Campaign()
+        {
+            campaignType = new Dictionary<string, int>
+                {
+                    { "Rally", 10000 },
+                    { "Ads", 4000 },
+                    { "Campaigner", 2000 },
+                    { "Donators", 1000 }
+                };
+        }
     }
 }
