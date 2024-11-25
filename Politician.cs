@@ -8,24 +8,14 @@ namespace Win538Electors
 {
     internal class Politician : Campaign
     {
-        private string party;
         private int funds;
-        private int turns;
         private int campaigners;
         private int donators;
         private int electorsWon;
         // Getters
-        public string GetParty()
-        {
-            return party;
-        }
         public int GetFunds()
         {
             return funds;
-        }
-        public int GetTurns()
-        {
-            return turns;
         }
         public int GetCampaigners()
         {
@@ -40,10 +30,6 @@ namespace Win538Electors
             return electorsWon;
         }
         // Setters
-        public void SetParty(string chosenParty)
-        {
-            party = chosenParty;
-        }
         public void SetFundsIncrease(int increase)
         {
             funds += increase;
@@ -51,11 +37,6 @@ namespace Win538Electors
         public void SetFundsPurchase(int price)
         {
             funds = funds - price;
-        }
-        public void SetTurns()
-        {
-            // Player taken turn
-            turns = turns - 1;
         }
         public void SetCampaigners()
         {
@@ -72,9 +53,7 @@ namespace Win538Electors
         // Constructors
         public Politician()
         {
-            party = "Independent";
             funds = 10000;
-            turns = 52;
             campaigners = 0;
             donators = 1;
             electorsWon = 0;
