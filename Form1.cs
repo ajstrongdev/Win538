@@ -1,3 +1,4 @@
+using Microsoft.VisualBasic;
 using System;
 using static System.Windows.Forms.AxHost;
 
@@ -93,7 +94,7 @@ namespace Win538Electors
                 listStates.Items.Add(state);
             }
             GeneratePolling();
-            //GameUI(false); // False indicates that a turn has not been completed.
+            GameUI(false); // False indicates that a turn has not been completed.
         }
         void GeneratePolling()
         {
@@ -267,51 +268,50 @@ namespace Win538Electors
 
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
+            player.TurnTaken(statePolling, states, GetCampaignCosts(true));
             if (showAllStates == false)
             {
                 switchedViewState = true;
             }
-            turnsTaken += 1;
+            turnsTaken++;
             player.SetTurns();
-            int donationsCount = 0;
-            // Count donations
-            Enumerable.Range(0, player.GetDonators()).ToList().ForEach(i =>
-            {
-                Random rand = new Random();
-                int donated = rand.Next(350, 501);
-                donationsCount += donated;
-            });
-            // Increase polling by +1 per campaigner for a random state (per campaigner)
-            Enumerable.Range(0, player.GetCampaigners()).ToList().ForEach(i =>
-            {
-                Random rand = new Random();
-                int stateChosen = rand.Next(0, 50);
-                statePolling[states[stateChosen]] += 1;
-                ActionLog(true, $"A campaigner increased your polling by +1 in {states[stateChosen]}");
-            });
-            if (donationsCount > 0)
-            {
-                player.SetFundsIncrease(donationsCount);
-                ActionLog(true, $"secured ${donationsCount} of funding this turn from your {player.GetDonators()} donators.");
-            }
-            ComputerTurn();
+            listActionLog.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
+            listActionLogAI.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
+            ai.TurnTaken(statePolling, states, GetCampaignCosts(false));
             UpdateGameStatistics();
-            if (player.GetTurns() != 0)
+            if (player.GetTurns() == 0)
+            {
+                GameUI(true);
+                btnEndTurn.Enabled = false;
+                btnGetResults.Enabled = true;
+            } else
             {
                 GameUI(false);
             }
-            else
-            {
-                GameUI(true);
-                btnGetResults.Enabled = true;
-                btnEndTurn.Enabled = false;
-                btnDonator.Enabled = false;
-            }
-            listActionLog.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
-            listActionLogAI.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
         }
 
-        private void btnCampaignRally_Click(object sender, EventArgs e)
+        private Dictionary<string, int> GetCampaignCosts(bool isPlayer)
+        {
+            if (!isPlayer)
+            {
+                return new Dictionary<string, int> {
+                    { "Rally", ai.GetCampaignCost("Rally") },
+                    { "Ads", ai.GetCampaignCost("Ads") },
+                    { "Campaigner", ai.GetCampaignCost("Campaigner") },
+                    { "Donators", ai.GetCampaignCost("Donators") }
+                };
+            } else
+            {
+                return new Dictionary<string, int> {
+                    { "Rally", player.GetCampaignCost("Rally") },
+                    { "Ads", player.GetCampaignCost("Ads") },
+                    { "Campaigner", player.GetCampaignCost("Campaigner") },
+                    { "Donators", player.GetCampaignCost("Donators") }
+                };
+            }
+        }
+
+    private void btnCampaignRally_Click(object sender, EventArgs e)
         {
             if (listStates.SelectedIndex == -1)
             {
@@ -323,6 +323,7 @@ namespace Win538Electors
             {
                 player.Rally(selectedState, statePolling, player.GetCampaignCost("Rally"), player.GetRallyCostIncrease());
                 ActionLog(true, $"Held a rally in {selectedState}.");
+                GameUI(true);
             }
             catch (InvalidOperationException ex)
             {
@@ -331,7 +332,51 @@ namespace Win538Electors
             UpdateGameStatistics();
         }
 
-        // Public as game messages from Ai.cs and Player.cs need to be passed through to the form.
+        private void btnDonator_Click(object sender, EventArgs e) {
+            try
+            {
+                player.AddDonator(player.GetCampaignCost("Donators"), player.GetDonationCostIncrease());
+                GameUI(true);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Action Failed");
+            }
+            UpdateGameStatistics();
+        }
+        
+        private void btnAdvertisements_Click(object sender, EventArgs e) {
+            if (listStates.SelectedIndex == -1)
+            {
+                MessageBox.Show("Please select a state to rally in.");
+                return;
+            }
+            string selectedState = listStates.SelectedItem.ToString();
+            try
+            {
+                player.Ads(selectedState, statePolling, player.GetCampaignCost("Ads"), player.GetAdsCostIncrease());
+                GameUI(true);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Action Failed");
+            }
+            UpdateGameStatistics();
+        }
+        private void btnCampaigner_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                player.AddCampaigner(player.GetCampaignCost("Campaigner"), player.GetCampaignerCostIncrease());
+                GameUI(true);
+            }
+            catch (InvalidOperationException ex)
+            {
+                MessageBox.Show(ex.Message, "Action Failed");
+            }
+            UpdateGameStatistics();
+        }
+
         public void ActionLog(bool isPlayer, string action)
         {
             if (!isPlayer)
@@ -343,69 +388,6 @@ namespace Win538Electors
                 listActionLog.Items.Insert(0, $"You: {action}");
             }
         }
-
-        private void btnDonator_Click(object sender, EventArgs e)
-        {
-            int cost = player.GetCampaignCost("Donators");
-            if (player.GetFunds() >= cost)
-            {
-                player.SetFundsPurchase(cost);
-                ActionLog(true, $"Purchased a donator.");
-                player.SetDonators();
-                player.SetCampaignCost("Donators", Convert.ToInt32(cost * donationCostIncrease));
-            }
-            else
-            {
-                MessageBox.Show("Not enough funds.", "Warning: Insufficient funds");
-            }
-            GameUI(true);
-            UpdateGameStatistics();
-        }
-
-        private void btnAdvertisements_Click(object sender, EventArgs e)
-        {
-            int cost = player.GetCampaignCost("Ads");
-            if (listStates.SelectedIndex != -1) // Make sure a user has a state selected when campaigning
-            {
-                if (player.GetFunds() >= cost)
-                {
-                    GameUI(true);
-                    player.SetFundsPurchase(cost);
-                    string selected = listStates.SelectedItem.ToString().Trim();
-                    statePolling[selected] = statePolling[selected] + 2;
-                    ActionLog(true, $"Placed TV Advertisements in {selected}, increasing your polling by: +2");
-                    player.SetCampaignCost("Ads", Convert.ToInt32(cost * adsCostIncrease));
-                }
-                else
-                {
-                    MessageBox.Show("Not enough funds.", "Warning: Insufficient funds");
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select a state to campaign in");
-            }
-            UpdateGameStatistics();
-        }
-
-        private void btnCampaigner_Click(object sender, EventArgs e)
-        {
-            int cost = player.GetCampaignCost("Campaigner");
-            if (player.GetFunds() >= cost)
-            {
-                GameUI(true);
-                player.SetFundsPurchase(cost);
-                ActionLog(true, $"You purchased a campaigner.");
-                player.SetCampaigners();
-                player.SetCampaignCost("Campaigner", Convert.ToInt32(cost * campaignerCostIncrease));
-            }
-            else
-            {
-                MessageBox.Show("Not enough funds.", "Warning: Insufficient funds");
-            }
-            UpdateGameStatistics();
-        }
-
         async void GenerateResults()
         {
             foreach (string state in states)
@@ -439,7 +421,6 @@ namespace Win538Electors
                 UpdateGameStatistics();
             }
         }
-
         private void btnGetResults_Click(object sender, EventArgs e)
         {
             btnGetResults.Enabled = false;

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -54,7 +55,27 @@ namespace Win538Electors
         // Methods
         public override void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts)
         {
-            throw new NotImplementedException();
+            // Count donations
+            int donationsCount = 0;
+            Enumerable.Range(0, GetDonators()).ToList().ForEach(i =>
+            {
+                Random rand = new Random();
+                int donated = rand.Next(350, 501);
+                donationsCount += donated;
+            });
+            // Increase polling by +1 per campaigner for a random state (per campaigner)
+            Enumerable.Range(0, GetCampaigners()).ToList().ForEach(i =>
+            {
+                Random rand = new Random();
+                int stateChosen = rand.Next(0, 50);
+                statePolling[states[stateChosen]] += 1;
+                //ActionLog(true, $"A campaigner increased your polling by +1 in {states[stateChosen]}");
+            });
+            if (donationsCount > 0)
+            {
+                SetFundsIncrease(donationsCount);
+                // ActionLog(true, $"secured ${donationsCount} of funding this turn from your {player.GetDonators()} donators.");
+            }
         }
 
         public void Rally(string selectedState, Dictionary<string, int> statePolling, int rallyCost, double rallyCostIncrease)
