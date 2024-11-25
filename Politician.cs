@@ -12,6 +12,8 @@ namespace Win538Electors
         protected int campaigners;
         protected int donators;
         protected int electorsWon;
+        protected List<string> latestAction;
+        protected int turnTicker;
         protected Campaign campaign;
         // Getters
         public int GetFunds()
@@ -30,6 +32,19 @@ namespace Win538Electors
         {
             return electorsWon;
         }
+        public int GetCampaignCost(string type)
+        {
+            return campaign.GetCampaignCost(type);
+        }
+        public List<string> GetLatestAction()
+        {
+            return latestAction;
+        }
+        public int GetTurnTicker()
+        {
+            return turnTicker;
+        }
+
         // Setters
         public void SetFundsIncrease(int increase)
         {
@@ -55,9 +70,13 @@ namespace Win538Electors
         {
             campaign.SetCampaignCost(type, change);
         }
-        public int GetCampaignCost(string type)
+        public void SetLatestAction(string action)
         {
-            return campaign.GetCampaignCost(type);
+            latestAction.Insert(0, action);
+        }
+        public void SetTurnTicker()
+        {
+            turnTicker += 1;
         }
         // Constructors
         public Politician()
@@ -67,6 +86,8 @@ namespace Win538Electors
             donators = 1;
             electorsWon = 0;
             campaign = new Campaign(); // Composition instead of inheritence: https://code-maze.com/csharp-composition-vs-inheritance/
+            turnTicker = 0;
+            latestAction = new List<string>();
         }
         // Methods
         public abstract void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts);

@@ -510,13 +510,13 @@
             // 
             // listActionLog
             // 
-            listActionLog.Font = new Font("Noto Sans", 12F);
+            listActionLog.Font = new Font("Noto Sans", 11F);
             listActionLog.FormattingEnabled = true;
-            listActionLog.ItemHeight = 30;
+            listActionLog.ItemHeight = 27;
             listActionLog.Location = new Point(0, 39);
             listActionLog.Name = "listActionLog";
             listActionLog.ScrollAlwaysVisible = true;
-            listActionLog.Size = new Size(639, 124);
+            listActionLog.Size = new Size(639, 112);
             listActionLog.TabIndex = 10;
             // 
             // groupBox7
@@ -575,13 +575,13 @@
             // 
             // listActionLogAI
             // 
-            listActionLogAI.Font = new Font("Noto Sans", 12F);
+            listActionLogAI.Font = new Font("Noto Sans", 11F);
             listActionLogAI.FormattingEnabled = true;
-            listActionLogAI.ItemHeight = 30;
+            listActionLogAI.ItemHeight = 27;
             listActionLogAI.Location = new Point(0, 39);
             listActionLogAI.Name = "listActionLogAI";
             listActionLogAI.ScrollAlwaysVisible = true;
-            listActionLogAI.Size = new Size(639, 124);
+            listActionLogAI.Size = new Size(639, 112);
             listActionLogAI.TabIndex = 10;
             // 
             // Form1

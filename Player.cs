@@ -55,6 +55,7 @@ namespace Win538Electors
         // Methods
         public override void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts)
         {
+            SetTurnTicker(); // Count a turn
             // Count donations
             int donationsCount = 0;
             Enumerable.Range(0, GetDonators()).ToList().ForEach(i =>
@@ -69,12 +70,12 @@ namespace Win538Electors
                 Random rand = new Random();
                 int stateChosen = rand.Next(0, 50);
                 statePolling[states[stateChosen]] += 1;
-                //ActionLog(true, $"A campaigner increased your polling by +1 in {states[stateChosen]}");
+                SetLatestAction($"A campaigner increased your polling by +1 in {states[stateChosen]} ({GetTurnTicker()})");
             });
             if (donationsCount > 0)
             {
                 SetFundsIncrease(donationsCount);
-                // ActionLog(true, $"secured ${donationsCount} of funding this turn from your {player.GetDonators()} donators.");
+                SetLatestAction($"secured ${donationsCount} of funding this turn from your {GetDonators()} donators. ({GetTurnTicker()})");
             }
         }
 
@@ -85,6 +86,7 @@ namespace Win538Electors
                 SetFundsPurchase(rallyCost);
                 statePolling[selectedState] += 4;
                 UpdateCampaignCost("Rally", Convert.ToInt32(rallyCost * rallyCostIncrease));
+                SetLatestAction($"Held a campaign rally in {selectedState}, increasing your polling by: +4 ({GetTurnTicker()})");
             }
             else
             {
@@ -99,6 +101,7 @@ namespace Win538Electors
                 SetFundsPurchase(adsCost);
                 statePolling[selectedState] += 2;
                 UpdateCampaignCost("Ads", Convert.ToInt32(adsCost * adsCostIncrease));
+                SetLatestAction($"Placed TV Advertisements in {selectedState}, increasing your polling by: +2 ({GetTurnTicker()})");
             }
             else
             {
@@ -112,6 +115,7 @@ namespace Win538Electors
                 SetFundsPurchase(campaignerCost);
                 SetCampaigners();
                 UpdateCampaignCost("Campaigner", Convert.ToInt32(campaignerCost * campaignerCostIncrease));
+                SetLatestAction($"Purchased a campaigner. ({GetTurnTicker()})");
             }
             else
             {
@@ -125,6 +129,7 @@ namespace Win538Electors
                 SetFundsPurchase(donatorCost);
                 SetDonators();
                 UpdateCampaignCost("Donators", Convert.ToInt32(donatorCost * donatorCostIncrease));
+                SetLatestAction($"Purchased a donator. ({GetTurnTicker()})");
             }
             else
             {

@@ -37,6 +37,7 @@ namespace Win538Electors
         // Methods
         public override void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts)
         {
+            SetTurnTicker(); // Count a turn
             int donationsCount = 0;
             // Count donations for the computer
             Enumerable.Range(0, GetDonators()).ToList().ForEach(i =>
@@ -48,12 +49,14 @@ namespace Win538Electors
             if (donationsCount > 0)
             {
                 SetFundsIncrease(donationsCount);
+                SetLatestAction($"secured ${donationsCount} of funding this turn from your {GetDonators()} donators. ({GetTurnTicker()})");
             }
             Enumerable.Range(0, GetCampaigners()).ToList().ForEach(i =>
             {
                 Random rand = new Random();
                 int stateChosen = rand.Next(0, 50);
                 statePolling[states[stateChosen]] -= 1;
+                SetLatestAction($"A campaigner decreased your polling by -1 in {states[stateChosen]} ({GetTurnTicker()})");
             });
             // Start turn logic here.
             string[] statesLosing = statePolling // This will get the states in which the AI is losing in currently
@@ -66,7 +69,7 @@ namespace Win538Electors
                 if (GetFunds() > GetCampaignCost("Donators"))
                 {
                     SetFundsPurchase(GetCampaignCost("Donators"));
-                    //ActionLog(false, $"Purchased a donator.");
+                    SetLatestAction($"Purchased a donator. ({GetTurnTicker()})");
                     SetDonators();
                     UpdateCampaignCost("Donators", Convert.ToInt32(GetCampaignCost("Donators") * donationCostIncrease));
                     return;
@@ -87,7 +90,7 @@ namespace Win538Electors
             {
                 SetFundsPurchase(GetCampaignCost("Rally"));
                 statePolling[selectedState] = statePolling[selectedState] - 4;
-                //ActionLog(false, $"Held a campaign rally in {selectedState}, decreasing your polling by: -4");
+                SetLatestAction($"Held a campaign rally in {selectedState}, decreasing your polling by: -4 ({GetTurnTicker()})");
                 UpdateCampaignCost("Rally", Convert.ToInt32(GetCampaignCost("Rally") * rallyCostIncrease));
                 return;
             }
@@ -95,14 +98,14 @@ namespace Win538Electors
             {
                 SetFundsPurchase(GetCampaignCost("Ads"));
                 statePolling[selectedState] = statePolling[selectedState] - 2;
-                //ActionLog(false, $"Placed TV Advertisements in {selectedState}, decreasing your polling by: -2");
+                SetLatestAction($"Placed TV Advertisements in {selectedState}, decreasing your polling by: -2 ({GetTurnTicker()})");
                 UpdateCampaignCost("Ads", Convert.ToInt32(GetCampaignCost("Ads") * rallyCostIncrease));
                 return;
             }
             else if (GetFunds() > GetCampaignCost("Campaigner"))
             {
                 SetFundsPurchase(GetCampaignCost("Campaigner"));
-                //ActionLog(false, $"Purchased a campaigner.");
+                SetLatestAction($"Purchased a campaigner. ({GetTurnTicker()})");
                 SetCampaigners();
                 UpdateCampaignCost("Campaigner", Convert.ToInt32(GetCampaignCost("Campaigner") * campaignerCostIncrease));
                 return;
@@ -110,14 +113,14 @@ namespace Win538Electors
             else if (GetFunds() > GetCampaignCost("Donators"))
             {
                 SetFundsPurchase(GetCampaignCost("Donators"));
-                //ActionLog(false, $"Purchased a donator.");
+                SetLatestAction($"Purchased a donator. ({GetTurnTicker()})");
                 SetDonators();
                 UpdateCampaignCost("Donators", Convert.ToInt32(GetCampaignCost("Donators") * donationCostIncrease));
                 return;
             }
             else
             {
-                //ActionLog(false, "Skipped their turn, having no money to make an action.");
+                SetLatestAction($"Skipped their turn. ({GetTurnTicker()})");
                 return;
             }
         }

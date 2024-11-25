@@ -75,7 +75,6 @@ namespace Win538Electors
                 { "Wyoming", 3 },
             };
     private Dictionary<string, int> statePolling = new Dictionary<string, int>();
-        int turnsTaken = 1;
         bool showAllStates = true;
         bool switchedViewState = false;
         public Form1()
@@ -88,7 +87,6 @@ namespace Win538Electors
         }
         void GameInit()
         {
-            listActionLog.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
             foreach (string state in states)
             {
                 listStates.Items.Add(state);
@@ -268,15 +266,14 @@ namespace Win538Electors
 
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
+            // Player's turn logic
             player.TurnTaken(statePolling, states, GetCampaignCosts(true));
             if (showAllStates == false)
             {
                 switchedViewState = true;
             }
-            turnsTaken++;
             player.SetTurns();
-            listActionLog.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
-            listActionLogAI.Items.Insert(0, $"--- TURN: {turnsTaken} ^ ---");
+            // AI's turn
             ai.TurnTaken(statePolling, states, GetCampaignCosts(false));
             UpdateGameStatistics();
             if (player.GetTurns() == 0)
@@ -288,6 +285,7 @@ namespace Win538Electors
             {
                 GameUI(false);
             }
+            ActionLogRefresh();
         }
 
         private Dictionary<string, int> GetCampaignCosts(bool isPlayer)
@@ -388,6 +386,21 @@ namespace Win538Electors
                 listActionLog.Items.Insert(0, $"You: {action}");
             }
         }
+
+        public void ActionLogRefresh()
+        {
+            listActionLog.Items.Clear();
+            listActionLogAI.Items.Clear();
+            foreach (var action in player.GetLatestAction())
+            {
+                listActionLog.Items.Add("You: " + action);
+            }
+            foreach (var action in ai.GetLatestAction())
+            {
+                listActionLogAI.Items.Add("AI: " + action);
+            }
+        }
+
         async void GenerateResults()
         {
             foreach (string state in states)
