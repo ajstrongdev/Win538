@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace Win538Electors
 {
-    internal class Politician : Campaign
+    internal abstract class Politician
     {
-        private int funds;
-        private int campaigners;
-        private int donators;
-        private int electorsWon;
+        protected int funds;
+        protected int campaigners;
+        protected int donators;
+        protected int electorsWon;
+        protected Campaign campaign;
         // Getters
         public int GetFunds()
         {
@@ -50,6 +51,14 @@ namespace Win538Electors
         {
             electorsWon += electors;
         }
+        public void UpdateCampaignCost(string type, int change)
+        {
+            campaign.SetCampaignCost(type, change);
+        }
+        public int GetCampaignCost(string type)
+        {
+            return campaign.GetCampaignCost(type);
+        }
         // Constructors
         public Politician()
         {
@@ -57,6 +66,9 @@ namespace Win538Electors
             campaigners = 0;
             donators = 1;
             electorsWon = 0;
+            campaign = new Campaign(); // Composition instead of inheritence: https://code-maze.com/csharp-composition-vs-inheritance/
         }
+        // Methods
+        public abstract void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts);
     }
 }
