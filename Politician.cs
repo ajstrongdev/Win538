@@ -6,26 +6,19 @@ using System.Threading.Tasks;
 
 namespace Win538Electors
 {
-    internal class Politician
+    internal abstract class Politician
     {
-        private string party;
-        private int funds;
-        private int turns;
-        private int campaigners;
-        private int donators;
-        private int electorsWon;
+        protected int funds;
+        protected int campaigners;
+        protected int donators;
+        protected int electorsWon;
+        protected List<string> latestAction;
+        protected int turnTicker;
+        protected Campaign campaign;
         // Getters
-        public string GetParty()
-        {
-            return party;
-        }
         public int GetFunds()
         {
             return funds;
-        }
-        public int GetTurns()
-        {
-            return turns;
         }
         public int GetCampaigners()
         {
@@ -39,11 +32,20 @@ namespace Win538Electors
         {
             return electorsWon;
         }
-        // Setters
-        public void SetParty(string chosenParty)
+        public int GetCampaignCost(string type)
         {
-            party = chosenParty;
+            return campaign.GetCampaignCost(type);
         }
+        public List<string> GetLatestAction()
+        {
+            return latestAction;
+        }
+        public int GetTurnTicker()
+        {
+            return turnTicker;
+        }
+
+        // Setters
         public void SetFundsIncrease(int increase)
         {
             funds += increase;
@@ -51,11 +53,6 @@ namespace Win538Electors
         public void SetFundsPurchase(int price)
         {
             funds = funds - price;
-        }
-        public void SetTurns()
-        {
-            // Player taken turn
-            turns = turns - 1;
         }
         public void SetCampaigners()
         {
@@ -69,15 +66,30 @@ namespace Win538Electors
         {
             electorsWon += electors;
         }
+        public void UpdateCampaignCost(string type, int change)
+        {
+            campaign.SetCampaignCost(type, change);
+        }
+        public void SetLatestAction(string action)
+        {
+            latestAction.Insert(0, action);
+        }
+        public void SetTurnTicker()
+        {
+            turnTicker += 1;
+        }
         // Constructors
         public Politician()
         {
-            party = "Independent";
             funds = 10000;
-            turns = 52;
             campaigners = 0;
             donators = 1;
             electorsWon = 0;
+            campaign = new Campaign(); // Composition instead of inheritence: https://code-maze.com/csharp-composition-vs-inheritance/
+            turnTicker = 0;
+            latestAction = new List<string>();
         }
+        // Methods
+        public abstract void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts);
     }
 }
