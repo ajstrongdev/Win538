@@ -408,102 +408,30 @@ namespace Win538Electors
             {
                 int odds = rand.Next(1, 11);
                 await Task.Delay(1000);
-                if (statePolling[state] <= -5)
+                // Guarantee the AI wins if polling is -5 or below.
+                if (statePolling[state] <= -5) {
+                    AIWinState(state);
+                    continue; 
+                }
+                // Determine whether the AI or player wins. 
+                bool winAI = statePolling[state] switch // Switch expression: https://www.w3schools.com/cs/cs_switch.php
+                {
+                    -4 => odds > 1,
+                    -3 => odds > 2,
+                    -2 => odds > 3,
+                    -1 => odds > 4,
+                    0 => odds > 5,
+                    1 => odds <= 4,
+                    2 => odds <= 3,
+                    3 => odds <= 2,
+                    4 => odds <= 1,
+                    >= 5 => false, // If state polling is 5+ then the player will win the state.
+                    _ => false
+                };
+                if (winAI)
                 {
                     AIWinState(state);
-                }
-                if (statePolling[state] == -4)
-                {
-                    // 9/10 chance AI wins
-                    if (odds > 1)
-                    {
-                        AIWinState(state);
-                    } else
-                    {
-                        PlayerWinState(state);
-                    }
-                }
-                if (statePolling[state] == -3 )
-                {
-                    if (odds > 2)
-                    {
-                        AIWinState(state);
-                    } else
-                    {
-                        PlayerWinState(state);
-                    }
-                }
-                if (statePolling[state] == -2)
-                {
-                    if (odds > 3)
-                    {
-                        AIWinState(state);
-                    } else
-                    {
-                        PlayerWinState(state);
-                    }
-                }
-                if (statePolling[state] == -1)
-                {
-                    if (odds > 4)
-                    {
-                        AIWinState(state);
-                    } else
-                    {
-                        PlayerWinState(state);
-                    }
-                }
-                if (statePolling[state] == 0)
-                {
-                    // 50/50 chance of state being won by either player or ai.
-                    if (odds > 5)
-                    {
-                        AIWinState(state);
-                    } else
-                    {
-                        PlayerWinState(state);
-                    }
-                }
-                if (statePolling[state] == 1) {
-                    if (odds > 4)
-                    {
-                        PlayerWinState(state);
-                    } else
-                    {
-                        AIWinState(state);
-                    }
-                }
-                if (statePolling[state] == 2)
-                {
-                    if (odds > 3)
-                    {
-                        PlayerWinState(state);
-                    } else
-                    {
-                        AIWinState(state);
-                    }
-                }
-                if (statePolling[state] == 3)
-                {
-                    if (odds > 2)
-                    {
-                        PlayerWinState(state);
-                    } else
-                    {
-                        AIWinState(state);
-                    }
-                }
-                if (statePolling[state] == 4)
-                {
-                    if (odds > 1)
-                    {
-                        PlayerWinState(state);
-                    } else
-                    {
-                        AIWinState(state);
-                    }
-                }
-                if (statePolling[state] >= 5)
+                } else
                 {
                     PlayerWinState(state);
                 }
