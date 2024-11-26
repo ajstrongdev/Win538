@@ -1,6 +1,7 @@
 using Microsoft.VisualBasic;
 using System;
 using static System.Windows.Forms.AxHost;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
 
 namespace Win538Electors
 {
@@ -400,40 +401,127 @@ namespace Win538Electors
                 listActionLogAI.Items.Add("AI: " + action);
             }
         }
-
         async void GenerateResults()
         {
+            Random rand = new Random();
             foreach (string state in states)
             {
+                int odds = rand.Next(1, 11);
                 await Task.Delay(1000);
-                if (statePolling[state] < 0)
+                if (statePolling[state] <= -5)
                 {
-                    ai.SetElectors(electoralVotes[state]);
-                    ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+                    AIWinState(state);
                 }
-                else if (statePolling[state] > 0)
+                if (statePolling[state] == -4)
                 {
-                    player.SetElectors(electoralVotes[state]);
-                    ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+                    // 9/10 chance AI wins
+                    if (odds > 1)
+                    {
+                        AIWinState(state);
+                    } else
+                    {
+                        PlayerWinState(state);
+                    }
                 }
-                else if (statePolling[state] == 0)
+                if (statePolling[state] == -3 )
                 {
-                    Random rand = new Random();
-                    int swingStateWinner = rand.Next(0, 2);
-                    if (swingStateWinner == 0)
+                    if (odds > 2)
                     {
-                        ai.SetElectors(electoralVotes[state]);
-                        ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
-                    }
-                    else if (swingStateWinner == 1)
+                        AIWinState(state);
+                    } else
                     {
-                        player.SetElectors(electoralVotes[state]);
-                        ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+                        PlayerWinState(state);
                     }
+                }
+                if (statePolling[state] == -2)
+                {
+                    if (odds > 3)
+                    {
+                        AIWinState(state);
+                    } else
+                    {
+                        PlayerWinState(state);
+                    }
+                }
+                if (statePolling[state] == -1)
+                {
+                    if (odds > 4)
+                    {
+                        AIWinState(state);
+                    } else
+                    {
+                        PlayerWinState(state);
+                    }
+                }
+                if (statePolling[state] == 0)
+                {
+                    // 50/50 chance of state being won by either player or ai.
+                    if (odds > 5)
+                    {
+                        AIWinState(state);
+                    } else
+                    {
+                        PlayerWinState(state);
+                    }
+                }
+                if (statePolling[state] == 1) {
+                    if (odds > 4)
+                    {
+                        PlayerWinState(state);
+                    } else
+                    {
+                        AIWinState(state);
+                    }
+                }
+                if (statePolling[state] == 2)
+                {
+                    if (odds > 3)
+                    {
+                        PlayerWinState(state);
+                    } else
+                    {
+                        AIWinState(state);
+                    }
+                }
+                if (statePolling[state] == 3)
+                {
+                    if (odds > 2)
+                    {
+                        PlayerWinState(state);
+                    } else
+                    {
+                        AIWinState(state);
+                    }
+                }
+                if (statePolling[state] == 4)
+                {
+                    if (odds > 1)
+                    {
+                        PlayerWinState(state);
+                    } else
+                    {
+                        AIWinState(state);
+                    }
+                }
+                if (statePolling[state] >= 5)
+                {
+                    PlayerWinState(state);
                 }
                 UpdateGameStatistics();
             }
         }
+
+        void PlayerWinState(string state)
+        {
+            player.SetElectors(electoralVotes[state]);
+            ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+        }
+        void AIWinState(string state)
+        {
+            ai.SetElectors(electoralVotes[state]);
+            ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+        }
+
         private void btnGetResults_Click(object sender, EventArgs e)
         {
             btnGetResults.Enabled = false;
