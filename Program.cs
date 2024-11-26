@@ -1,3 +1,5 @@
+using System.Diagnostics;
+
 namespace Win538Electors
 {
     internal static class Program
@@ -6,12 +8,26 @@ namespace Win538Electors
         ///  The main entry point for the application.
         /// </summary>
         [STAThread]
-        static void Main()
+        static void Main(string[] args)
         {
-            // To customize application configuration such as set high DPI settings or default font,
-            // see https://aka.ms/applicationconfiguration.
+            string aiDifficulty = "Normal";
+            if (args != null && args.Length > 0)
+            {
+                if (args[0] == "Easy")
+                {
+                    aiDifficulty = "Easy";
+                }
+                else if (args[0] == "Normal")
+                {
+                    aiDifficulty = "Normal";
+                }
+                else if (args[0] == "Hard")
+                {
+                    aiDifficulty = "Hard";
+                }
+            }
             ApplicationConfiguration.Initialize();
-            Application.Run(new Form1());
+            Application.Run(new Form1(aiDifficulty));
         }
     }
 }
