@@ -8,7 +8,7 @@ namespace Win538Electors
     public partial class Form1 : Form
     {
         Player player = new Player();
-        Ai ai = new Ai("Normal");
+        Ai ai = new Ai(); // Initialise the AI with a difficulty of normal, this can be overwriten later.
         private string[] states = new string[]
         {
                 "Alabama", "Alaska", "Arizona", "Arkansas", "California", "Colorado",
@@ -78,9 +78,10 @@ namespace Win538Electors
     private Dictionary<string, int> statePolling = new Dictionary<string, int>();
         bool showAllStates = true;
         bool switchedViewState = false;
-        public Form1()
+        public Form1(string aiDifficulty)
         {
             InitializeComponent();
+            ai.SetDifficulty(aiDifficulty);
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -100,7 +101,10 @@ namespace Win538Electors
             Random rand = new Random();
             foreach (string state in states)
             {
-                int pollingValue = rand.Next(-2, 3);
+                int pollingValue = 0;
+                if (ai.GetDifficulty() == "Easy") { pollingValue = rand.Next(0, 4);  }
+                if (ai.GetDifficulty() == "Normal") { pollingValue = rand.Next(-2, 3); }
+                if (ai.GetDifficulty() == "Hard") { pollingValue = rand.Next(-4, 1); }
                 statePolling[state] = pollingValue;
             }
             UpdateGameStatistics();
@@ -143,6 +147,7 @@ namespace Win538Electors
             lblDonatorsAI.Text = $"Donators: {ai.GetDonators()}";
             lblResultsYou.Text = $"{player.GetElectors()}";
             lblResultsAI.Text = $"{ai.GetElectors()}"; // Change this to use ai.electorsWon when the class has been created here.
+            lblDifficulty.Text = $"Difficulty: {ai.GetDifficulty()}";
             btnRally.Text = $"Rally: ${player.GetCampaignCost("Rally")}";
             btnDonator.Text = $"Donator: ${player.GetCampaignCost("Donators")}";
             btnCampaigner.Text = $"Campaigner: ${player.GetCampaignCost("Campaigner")}";
@@ -409,29 +414,32 @@ namespace Win538Electors
                 int odds = rand.Next(1, 11);
                 await Task.Delay(1000);
                 // Guarantee the AI wins if polling is -5 or below.
-                if (statePolling[state] <= -5) {
+                if (statePolling[state] <= -10)
+                {
                     AIWinState(state);
-                    continue; 
+                    continue;
                 }
                 // Determine whether the AI or player wins. 
                 bool winAI = statePolling[state] switch // Switch expression: https://www.w3schools.com/cs/cs_switch.php
                 {
-                    -4 => odds > 1,
-                    -3 => odds > 2,
-                    -2 => odds > 3,
-                    -1 => odds > 4,
-                    0 => odds > 5,
-                    1 => odds <= 4,
-                    2 => odds <= 3,
-                    3 => odds <= 2,
-                    4 => odds <= 1,
-                    >= 5 => false, // If state polling is 5+ then the player will win the state.
+                    -10 or -9 => odds > 1,
+                    -8 or -7 => odds > 2,
+                    -6 or -5 => odds > 3,
+                    -4 or -3 => odds > 4,
+                    -2 or -1 => odds > 5,
+                    0 or 1 => odds <= 5,
+                    2 or 3 => odds <= 4,
+                    4 or 5 => odds <= 3,
+                    6 or 7 => odds <= 2,
+                    8 or 9 => odds <= 1,
+                    >= 10 => false,
                     _ => false
                 };
                 if (winAI)
                 {
                     AIWinState(state);
-                } else
+                }
+                else
                 {
                     PlayerWinState(state);
                 }
