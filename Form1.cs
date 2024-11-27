@@ -22,7 +22,7 @@ namespace Win538Electors
                 "Tennessee", "Texas", "Utah", "Vermont", "Virginia", "Washington",
                 "West Virginia", "Wisconsin", "Wyoming"
         };
-        private Dictionary<string,int> electoralVotes = new Dictionary<string, int> {
+        private Dictionary<string, int> electoralVotes = new Dictionary<string, int> {
                 { "Alabama", 9 },
                 { "Alaska", 3 },
                 { "Arizona", 11 },
@@ -75,7 +75,7 @@ namespace Win538Electors
                 { "Wisconsin", 10 },
                 { "Wyoming", 3 },
             };
-    private Dictionary<string, int> statePolling = new Dictionary<string, int>();
+        private Dictionary<string, int> statePolling = new Dictionary<string, int>();
         bool showAllStates = true;
         bool switchedViewState = false;
         public Form1(string aiDifficulty)
@@ -102,7 +102,7 @@ namespace Win538Electors
             foreach (string state in states)
             {
                 int pollingValue = 0;
-                if (ai.GetDifficulty() == "Easy") { pollingValue = rand.Next(0, 4);  }
+                if (ai.GetDifficulty() == "Easy") { pollingValue = rand.Next(0, 4); }
                 if (ai.GetDifficulty() == "Normal") { pollingValue = rand.Next(-2, 3); }
                 if (ai.GetDifficulty() == "Hard") { pollingValue = rand.Next(-4, 1); }
                 statePolling[state] = pollingValue;
@@ -180,7 +180,8 @@ namespace Win538Electors
                     {
                         listStates.Items.Add(state);
                     }
-                } else
+                }
+                else
                 {
                     listStates.Items.Clear();
                     string[] losingStates = statePolling // This will get the states in which the AI is losing in currently
@@ -206,13 +207,15 @@ namespace Win538Electors
                 {
                     lblRaceCall.BackColor = Color.Blue;
                     lblRaceCall.ForeColor = Color.White;
-                } else
+                }
+                else
                 {
                     lblRaceCall.BackColor = Color.Red;
                     lblRaceCall.ForeColor = Color.White;
                 }
                 lblRaceCall.Text = "You've won this race.";
-            } else if (ai.GetElectors() > 269)
+            }
+            else if (ai.GetElectors() > 269)
             {
                 if (player.GetParty() == "Democratic Party")
                 {
@@ -225,7 +228,8 @@ namespace Win538Electors
                     lblRaceCall.ForeColor = Color.White;
                 }
                 lblRaceCall.Text = "You've lost this race.";
-            } else if (ai.GetElectors() == 269 && player.GetElectors() == 269)
+            }
+            else if (ai.GetElectors() == 269 && player.GetElectors() == 269)
             {
                 lblRaceCall.Text = "Electoral college tie.";
             }
@@ -287,7 +291,8 @@ namespace Win538Electors
                 GameUI(true);
                 btnEndTurn.Enabled = false;
                 btnGetResults.Enabled = true;
-            } else
+            }
+            else
             {
                 GameUI(false);
             }
@@ -304,7 +309,8 @@ namespace Win538Electors
                     { "Campaigner", ai.GetCampaignCost("Campaigner") },
                     { "Donators", ai.GetCampaignCost("Donators") }
                 };
-            } else
+            }
+            else
             {
                 return new Dictionary<string, int> {
                     { "Rally", player.GetCampaignCost("Rally") },
@@ -315,7 +321,7 @@ namespace Win538Electors
             }
         }
 
-    private void btnCampaignRally_Click(object sender, EventArgs e)
+        private void btnCampaignRally_Click(object sender, EventArgs e)
         {
             if (listStates.SelectedIndex == -1)
             {
@@ -336,7 +342,8 @@ namespace Win538Electors
             UpdateGameStatistics();
         }
 
-        private void btnDonator_Click(object sender, EventArgs e) {
+        private void btnDonator_Click(object sender, EventArgs e)
+        {
             try
             {
                 player.AddDonator(player.GetCampaignCost("Donators"), player.GetDonationCostIncrease());
@@ -348,8 +355,9 @@ namespace Win538Electors
             }
             UpdateGameStatistics();
         }
-        
-        private void btnAdvertisements_Click(object sender, EventArgs e) {
+
+        private void btnAdvertisements_Click(object sender, EventArgs e)
+        {
             if (listStates.SelectedIndex == -1)
             {
                 MessageBox.Show("Please select a state to rally in.");
@@ -475,6 +483,36 @@ namespace Win538Electors
         {
             switchedViewState = true;
             showAllStates = false;
+            UpdateGameStatistics();
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            player.SaveGame();
+            ai.SaveGame();
+            FileStream fs = new FileStream("polling.dat", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            foreach (var state in statePolling)
+            {
+                bw.Write(state.Value);
+            }
+            bw.Close();
+            fs.Close();
+            MessageBox.Show("Game saved succesfully.");
+        }
+
+        private void loadToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            player.LoadGame();
+            ai.LoadGame();
+            FileStream fs = new FileStream("polling.dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(fs);
+            foreach (var state in states)
+            {
+                statePolling[state] = br.ReadInt32();
+            }
+            br.Close();
+            fs.Close();
             UpdateGameStatistics();
         }
     }

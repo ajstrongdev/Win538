@@ -54,6 +54,9 @@
             viewToolStripMenuItem = new ToolStripMenuItem();
             mnuAllStates = new ToolStripMenuItem();
             mnuStatesLosing = new ToolStripMenuItem();
+            gameToolStripMenuItem = new ToolStripMenuItem();
+            saveToolStripMenuItem = new ToolStripMenuItem();
+            loadToolStripMenuItem = new ToolStripMenuItem();
             mnuSelectParty = new ToolStripMenuItem();
             mnuDemocrat = new ToolStripMenuItem();
             mnuRepublican = new ToolStripMenuItem();
@@ -71,12 +74,12 @@
             groupBox6 = new GroupBox();
             listActionLog = new ListBox();
             groupBox7 = new GroupBox();
+            lblDifficulty = new Label();
             lblFundsAI = new Label();
             lblDonatorsAI = new Label();
             lblCampaignersAI = new Label();
             groupBox8 = new GroupBox();
             listActionLogAI = new ListBox();
-            lblDifficulty = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -327,7 +330,7 @@
             // 
             // optionsToolStripMenuItem
             // 
-            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, viewToolStripMenuItem });
+            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, viewToolStripMenuItem, gameToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.Size = new Size(75, 24);
             optionsToolStripMenuItem.Text = "Options";
@@ -335,14 +338,14 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(133, 26);
+            aboutToolStripMenuItem.Size = new Size(224, 26);
             aboutToolStripMenuItem.Text = "About";
             // 
             // viewToolStripMenuItem
             // 
             viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mnuAllStates, mnuStatesLosing });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(133, 26);
+            viewToolStripMenuItem.Size = new Size(224, 26);
             viewToolStripMenuItem.Text = "View";
             // 
             // mnuAllStates
@@ -358,6 +361,27 @@
             mnuStatesLosing.Size = new Size(176, 26);
             mnuStatesLosing.Text = "States losing";
             mnuStatesLosing.Click += mnuStatesLosing_Click;
+            // 
+            // gameToolStripMenuItem
+            // 
+            gameToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem });
+            gameToolStripMenuItem.Name = "gameToolStripMenuItem";
+            gameToolStripMenuItem.Size = new Size(224, 26);
+            gameToolStripMenuItem.Text = "Game";
+            // 
+            // saveToolStripMenuItem
+            // 
+            saveToolStripMenuItem.Name = "saveToolStripMenuItem";
+            saveToolStripMenuItem.Size = new Size(224, 26);
+            saveToolStripMenuItem.Text = "Save";
+            saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
+            // 
+            // loadToolStripMenuItem
+            // 
+            loadToolStripMenuItem.Name = "loadToolStripMenuItem";
+            loadToolStripMenuItem.Size = new Size(224, 26);
+            loadToolStripMenuItem.Text = "Load";
+            loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
             // 
             // mnuSelectParty
             // 
@@ -534,6 +558,16 @@
             groupBox7.TabStop = false;
             groupBox7.Text = "AI";
             // 
+            // lblDifficulty
+            // 
+            lblDifficulty.AutoSize = true;
+            lblDifficulty.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDifficulty.Location = new Point(273, 22);
+            lblDifficulty.Name = "lblDifficulty";
+            lblDifficulty.Size = new Size(95, 20);
+            lblDifficulty.TabIndex = 12;
+            lblDifficulty.Text = "Difficulty: Easy";
+            // 
             // lblFundsAI
             // 
             lblFundsAI.AutoSize = true;
@@ -585,16 +619,6 @@
             listActionLogAI.ScrollAlwaysVisible = true;
             listActionLogAI.Size = new Size(639, 112);
             listActionLogAI.TabIndex = 10;
-            // 
-            // lblDifficulty
-            // 
-            lblDifficulty.AutoSize = true;
-            lblDifficulty.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            lblDifficulty.Location = new Point(273, 22);
-            lblDifficulty.Name = "lblDifficulty";
-            lblDifficulty.Size = new Size(95, 20);
-            lblDifficulty.TabIndex = 12;
-            lblDifficulty.Text = "Difficulty: Easy";
             // 
             // Form1
             // 
@@ -687,5 +711,8 @@
         private ToolStripMenuItem mnuStatesLosing;
         private Label lblRaceCall;
         private Label lblDifficulty;
+        private ToolStripMenuItem gameToolStripMenuItem;
+        private ToolStripMenuItem saveToolStripMenuItem;
+        private ToolStripMenuItem loadToolStripMenuItem;
     }
 }
