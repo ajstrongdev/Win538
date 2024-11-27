@@ -78,6 +78,7 @@
             lblCampaignersAI = new Label();
             groupBox8 = new GroupBox();
             listActionLogAI = new ListBox();
+            lblDifficulty = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox4.SuspendLayout();
@@ -467,7 +468,7 @@
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
-            label5.Location = new Point(5, 337);
+            label5.Location = new Point(6, 337);
             label5.Name = "label5";
             label5.Size = new Size(174, 40);
             label5.TabIndex = 11;
@@ -537,6 +538,7 @@
             // 
             // groupBox7
             // 
+            groupBox7.Controls.Add(lblDifficulty);
             groupBox7.Controls.Add(lblFundsAI);
             groupBox7.Controls.Add(lblDonatorsAI);
             groupBox7.Controls.Add(lblCampaignersAI);
@@ -599,6 +601,16 @@
             listActionLogAI.ScrollAlwaysVisible = true;
             listActionLogAI.Size = new Size(639, 112);
             listActionLogAI.TabIndex = 10;
+            // 
+            // lblDifficulty
+            // 
+            lblDifficulty.AutoSize = true;
+            lblDifficulty.Font = new Font("Noto Sans", 7.8F, FontStyle.Regular, GraphicsUnit.Point, 0);
+            lblDifficulty.Location = new Point(273, 22);
+            lblDifficulty.Name = "lblDifficulty";
+            lblDifficulty.Size = new Size(95, 20);
+            lblDifficulty.TabIndex = 12;
+            lblDifficulty.Text = "Difficulty: Easy";
             // 
             // Form1
             // 
@@ -692,5 +704,6 @@
         private Label lblRaceCall;
         private ToolStripMenuItem saveGameToolStripMenuItem;
         private ToolStripMenuItem loadGameToolStripMenuItem;
+        private Label lblDifficulty;
     }
 }

@@ -23,11 +23,16 @@ namespace Win538Electors
         public double GetDonationCostIncrease() { return donationCostIncrease; }
         public double GetAdsCostIncrease() { return adsCostIncrease; }
         public double GetCampaignerCostIncrease() { return campaignerCostIncrease; }
+        // Setters
+        public void SetDifficulty(string aiDifficulty)
+        {
+            this.difficulty = aiDifficulty;
+        }
 
         // Constructor
-        public Ai(string difficulty)
+        public Ai()
         {
-            this.difficulty = difficulty;
+            difficulty = "Normal";
             rallyCostIncrease = 1.2;
             adsCostIncrease = 1.3;
             donationCostIncrease = 1.05;
