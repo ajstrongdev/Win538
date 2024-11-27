@@ -124,5 +124,36 @@ namespace Win538Electors
                 return;
             }
         }
+        public override void SaveGame()
+        {
+            FileStream fs = new FileStream("ai.dat", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(GetFunds());
+            bw.Write(GetCampaigners());
+            bw.Write(GetDonators());
+            bw.Write(GetCampaignCost("Rally"));
+            bw.Write(GetCampaignCost("Ads"));
+            bw.Write(GetCampaignCost("Campaigner"));
+            bw.Write(GetCampaignCost("Donators"));
+            bw.Write(GetDifficulty());
+            bw.Close();
+            fs.Close();
+        }
+
+        public override void LoadGame()
+        {
+            FileStream fs = new FileStream("ai.dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(fs);
+            this.funds = br.ReadInt32();
+            this.campaigners = br.ReadInt32();
+            this.donators = br.ReadInt32();
+            UpdateCampaignCost("Rally", br.ReadInt32());
+            UpdateCampaignCost("Ads", br.ReadInt32());
+            UpdateCampaignCost("Campaigner", br.ReadInt32());
+            UpdateCampaignCost("Donators", br.ReadInt32());
+            this.difficulty = br.ReadString();
+            br.Close();
+            fs.Close();
+        }
     }
 }
