@@ -79,6 +79,40 @@ namespace Win538Electors
             }
         }
 
+        public override void SaveGame()
+        {
+            FileStream fs = new FileStream("player.dat", FileMode.Create);
+            BinaryWriter bw = new BinaryWriter(fs);
+            bw.Write(GetFunds());
+            bw.Write(GetCampaigners());
+            bw.Write(GetDonators());
+            bw.Write(GetCampaignCost("Rally"));
+            bw.Write(GetCampaignCost("Ads"));
+            bw.Write(GetCampaignCost("Campaigner"));
+            bw.Write(GetCampaignCost("Donators"));
+            bw.Write(GetParty());
+            bw.Write(GetTurns());
+            bw.Close();
+            fs.Close();
+        }
+
+        public override void LoadGame()
+        {
+            FileStream fs = new FileStream("player.dat", FileMode.Open);
+            BinaryReader br = new BinaryReader(fs);
+            this.funds = br.ReadInt32();
+            this.campaigners = br.ReadInt32();
+            this.donators = br.ReadInt32();
+            UpdateCampaignCost("Rally", br.ReadInt32());
+            UpdateCampaignCost("Ads", br.ReadInt32());
+            UpdateCampaignCost("Campaigner", br.ReadInt32());
+            UpdateCampaignCost("Donators", br.ReadInt32());
+            this.party = br.ReadString();
+            this.turns = br.ReadInt32();
+            br.Close();
+            fs.Close();
+        }
+
         public void Rally(string selectedState, Dictionary<string, int> statePolling, int rallyCost, double rallyCostIncrease)
         {
             if (funds >= rallyCost)

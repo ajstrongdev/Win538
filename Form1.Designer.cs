@@ -54,6 +54,8 @@
             viewToolStripMenuItem = new ToolStripMenuItem();
             mnuAllStates = new ToolStripMenuItem();
             mnuStatesLosing = new ToolStripMenuItem();
+            saveGameToolStripMenuItem = new ToolStripMenuItem();
+            loadGameToolStripMenuItem = new ToolStripMenuItem();
             mnuSelectParty = new ToolStripMenuItem();
             mnuDemocrat = new ToolStripMenuItem();
             mnuRepublican = new ToolStripMenuItem();
@@ -327,7 +329,7 @@
             // 
             // optionsToolStripMenuItem
             // 
-            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, viewToolStripMenuItem });
+            optionsToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { aboutToolStripMenuItem, viewToolStripMenuItem, saveGameToolStripMenuItem, loadGameToolStripMenuItem });
             optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             optionsToolStripMenuItem.Size = new Size(75, 24);
             optionsToolStripMenuItem.Text = "Options";
@@ -335,14 +337,14 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(133, 26);
+            aboutToolStripMenuItem.Size = new Size(224, 26);
             aboutToolStripMenuItem.Text = "About";
             // 
             // viewToolStripMenuItem
             // 
             viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mnuAllStates, mnuStatesLosing });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(133, 26);
+            viewToolStripMenuItem.Size = new Size(224, 26);
             viewToolStripMenuItem.Text = "View";
             // 
             // mnuAllStates
@@ -358,6 +360,20 @@
             mnuStatesLosing.Size = new Size(176, 26);
             mnuStatesLosing.Text = "States losing";
             mnuStatesLosing.Click += mnuStatesLosing_Click;
+            // 
+            // saveGameToolStripMenuItem
+            // 
+            saveGameToolStripMenuItem.Name = "saveGameToolStripMenuItem";
+            saveGameToolStripMenuItem.Size = new Size(224, 26);
+            saveGameToolStripMenuItem.Text = "Save Game";
+            saveGameToolStripMenuItem.Click += saveGameToolStripMenuItem_Click;
+            // 
+            // loadGameToolStripMenuItem
+            // 
+            loadGameToolStripMenuItem.Name = "loadGameToolStripMenuItem";
+            loadGameToolStripMenuItem.Size = new Size(224, 26);
+            loadGameToolStripMenuItem.Text = "Load Game";
+            loadGameToolStripMenuItem.Click += loadGameToolStripMenuItem_Click;
             // 
             // mnuSelectParty
             // 
@@ -686,6 +702,8 @@
         private ToolStripMenuItem mnuAllStates;
         private ToolStripMenuItem mnuStatesLosing;
         private Label lblRaceCall;
+        private ToolStripMenuItem saveGameToolStripMenuItem;
+        private ToolStripMenuItem loadGameToolStripMenuItem;
         private Label lblDifficulty;
     }
 }

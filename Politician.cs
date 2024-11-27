@@ -91,5 +91,9 @@ namespace Win538Electors
         }
         // Methods
         public abstract void TurnTaken(Dictionary<string, int> statePolling, string[] states, Dictionary<string, int> campaignCosts);
+
+        public abstract void SaveGame();
+
+        public abstract void LoadGame();
     }
 }
