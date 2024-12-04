@@ -13,18 +13,18 @@ namespace Win538Electors
             string aiDifficulty = "Normal";
             if (args != null && args.Length > 0)
             {
-                if (args[0] == "Easy")
+                if (args[0] == "--easy" || args[0] == "-e")
                 {
                     aiDifficulty = "Easy";
                 }
-                else if (args[0] == "Normal")
+                else if (args[0] == "--normal" || args[0] == "-n")
                 {
                     aiDifficulty = "Normal";
                 }
-                else if (args[0] == "Hard")
+                else if (args[0] == "--hard" || args[0] == "-h")
                 {
                     aiDifficulty = "Hard";
-                }
+                } 
             }
             ApplicationConfiguration.Initialize();
             Application.Run(new Form1(aiDifficulty));
