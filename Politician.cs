@@ -74,10 +74,11 @@ namespace Win538Electors
         {
             latestAction.Insert(0, action);
         }
-        public void SetTurnTicker()
+        public void SetTurnTicker()  // This tracks the amount of turns have occured, used to display in action log.
         {
             turnTicker += 1;
         }
+
         // Constructors
         public Politician()
         {

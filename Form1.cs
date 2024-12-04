@@ -76,12 +76,12 @@ namespace Win538Electors
                 { "Wyoming", 3 },
             };
         private Dictionary<string, int> statePolling = new Dictionary<string, int>();
-        bool showAllStates = true;
-        bool switchedViewState = false;
+        bool showAllStates = true; // UI handler to display whether to show all states in the list view.
+        bool switchedViewState = false; // UI handler to display whether to show only states where you are losing.
         public Form1(string aiDifficulty)
         {
             InitializeComponent();
-            ai.SetDifficulty(aiDifficulty);
+            ai.SetDifficulty(aiDifficulty); // Load difficulty in from command-line. (If not initialised via command-line, it will default to normal, see Program.cs)
         }
         private void Form1_Load(object sender, EventArgs e)
         {
@@ -89,14 +89,14 @@ namespace Win538Electors
         }
         void GameInit()
         {
-            foreach (string state in states)
+            foreach (string state in states) // Load all 50 states into the listbox.
             {
                 listStates.Items.Add(state);
             }
             GeneratePolling();
             GameUI(false); // False indicates that a turn has not been completed.
         }
-        void GeneratePolling()
+        void GeneratePolling() // Generates random polling for each state. Each difficulity will have a different boundary.
         {
             Random rand = new Random();
             foreach (string state in states)
@@ -109,7 +109,7 @@ namespace Win538Electors
             }
             UpdateGameStatistics();
         }
-        void UpdateGameStatistics()
+        void UpdateGameStatistics() // Update UI elements
         {
             if (listStates.SelectedIndex != -1) // If an item is selected.
             {
@@ -128,7 +128,7 @@ namespace Win538Electors
             if (statePolling.Values.Count != 0)
             {
                 int nationalPolls = statePolling.Values.Sum();
-                if (nationalPolls > 0)
+                if (nationalPolls > 0) // A check to see whether the UI needs to put a "+" infront of the state polling.
                 {
                     lblNationalPolls.Text = $"National polling: +{nationalPolls}";
                 }
@@ -137,6 +137,7 @@ namespace Win538Electors
                     lblNationalPolls.Text = $"National polling: {nationalPolls}";
                 }
             }
+            // So much information to update.
             lblFunds.Text = $"Funds: ${player.GetFunds().ToString()}";
             lblFundsAI.Text = $"Funds: ${ai.GetFunds().ToString()}";
             lblTurns.Text = $"Turns left: {player.GetTurns().ToString()}/52";
@@ -146,12 +147,13 @@ namespace Win538Electors
             lblDonators.Text = $"Donators: {player.GetDonators()}";
             lblDonatorsAI.Text = $"Donators: {ai.GetDonators()}";
             lblResultsYou.Text = $"{player.GetElectors()}";
-            lblResultsAI.Text = $"{ai.GetElectors()}"; // Change this to use ai.electorsWon when the class has been created here.
+            lblResultsAI.Text = $"{ai.GetElectors()}";
             lblDifficulty.Text = $"Difficulty: {ai.GetDifficulty()}";
             btnRally.Text = $"Rally: ${player.GetCampaignCost("Rally")}";
             btnDonator.Text = $"Donator: ${player.GetCampaignCost("Donators")}";
             btnCampaigner.Text = $"Campaigner: ${player.GetCampaignCost("Campaigner")}";
             btnAdvertisements.Text = $"Advertisements: ${player.GetCampaignCost("Ads")}";
+            // Change UI colours based on party
             if (player.GetParty() == "Democratic Party")
             {
                 lblParty.ForeColor = Color.Blue;
@@ -195,7 +197,7 @@ namespace Win538Electors
                 }
                 switchedViewState = false;
             }
-
+            // Show state/phase of game
             if (player.GetTurns() == 0)
             {
                 lblRaceCall.Text = "Race yet to be called.";
@@ -231,15 +233,15 @@ namespace Win538Electors
             }
             else if (ai.GetElectors() == 269 && player.GetElectors() == 269)
             {
-                lblRaceCall.Text = "Electoral college tie.";
+                lblRaceCall.Text = "Electoral college tie."; 
             }
-
         }
+        // Refresh the game UI when a user changes which state they are looking at
         private void listStates_SelectedIndexChanged(object sender, EventArgs e)
         {
             UpdateGameStatistics();
         }
-
+        // Update the UI when a user completes their turn. 
         void GameUI(bool turnComplete)
         {
             if (turnComplete == true)
@@ -259,7 +261,7 @@ namespace Win538Electors
                 btnDonator.Enabled = true;
             }
         }
-
+        // Choosing political party
         private void mnuDemocrat_Click(object sender, EventArgs e)
         {
             player.SetParty("Democratic Party");
@@ -273,11 +275,12 @@ namespace Win538Electors
             UpdateGameStatistics();
             mnuSelectParty.Enabled = false;
         }
-
+        // Ending a turn
         private void btnEndTurn_Click(object sender, EventArgs e)
         {
             // Player's turn logic
             player.TurnTaken(statePolling, states, GetCampaignCosts(true));
+            // UI handling
             if (showAllStates == false)
             {
                 switchedViewState = true;
@@ -286,6 +289,7 @@ namespace Win538Electors
             // AI's turn
             ai.TurnTaken(statePolling, states, GetCampaignCosts(false));
             UpdateGameStatistics();
+            // If all turns are used, shift to end-game.
             if (player.GetTurns() == 0)
             {
                 GameUI(true);
@@ -298,7 +302,7 @@ namespace Win538Electors
             }
             ActionLogRefresh();
         }
-
+        // Returns a dictionary of campaign costs per activity.
         private Dictionary<string, int> GetCampaignCosts(bool isPlayer)
         {
             if (!isPlayer)
@@ -320,7 +324,7 @@ namespace Win538Electors
                 };
             }
         }
-
+        // Hold a campaign rally.
         private void btnCampaignRally_Click(object sender, EventArgs e)
         {
             if (listStates.SelectedIndex == -1)
@@ -335,13 +339,14 @@ namespace Win538Electors
                 ActionLog(true, $"Held a rally in {selectedState}.");
                 GameUI(true);
             }
-            catch (InvalidOperationException ex)
+            catch (InvalidOperationException ex) // If player is out of funds.
             {
                 MessageBox.Show(ex.Message, "Action Failed");
             }
             UpdateGameStatistics();
         }
 
+        // Purchase a donator
         private void btnDonator_Click(object sender, EventArgs e)
         {
             try
@@ -356,6 +361,7 @@ namespace Win538Electors
             UpdateGameStatistics();
         }
 
+        // Purchase advertisements
         private void btnAdvertisements_Click(object sender, EventArgs e)
         {
             if (listStates.SelectedIndex == -1)
@@ -375,6 +381,7 @@ namespace Win538Electors
             }
             UpdateGameStatistics();
         }
+        // Pay for a campaigner
         private void btnCampaigner_Click(object sender, EventArgs e)
         {
             try
@@ -388,7 +395,7 @@ namespace Win538Electors
             }
             UpdateGameStatistics();
         }
-
+        // Log actions taken in game.
         public void ActionLog(bool isPlayer, string action)
         {
             if (!isPlayer)
@@ -400,7 +407,7 @@ namespace Win538Electors
                 listActionLog.Items.Insert(0, $"You: {action}");
             }
         }
-
+        // Update the action log with actions taken through classes.
         public void ActionLogRefresh()
         {
             listActionLog.Items.Clear();
@@ -414,13 +421,28 @@ namespace Win538Electors
                 listActionLogAI.Items.Add("AI: " + action);
             }
         }
+
+        // Results countdown
+        async Task ResultsCountdown()
+        {
+            int countdown = 3;
+            for (int i = 0; i < 3; i++)
+            {
+                listActionLog.Items.Insert(0, $"RESULTS IN: {countdown}");
+                listActionLogAI.Items.Insert(0, $"RESULTS IN: {countdown}");
+                await Task.Delay(1000);
+                countdown = countdown - 1;
+            }
+        }
+
+        // Generate the results
         async void GenerateResults()
         {
+            await ResultsCountdown();
             Random rand = new Random();
             foreach (string state in states)
             {
                 int odds = rand.Next(1, 11);
-                await Task.Delay(1000);
                 // Guarantee the AI wins if polling is -5 or below.
                 if (statePolling[state] <= -10)
                 {
@@ -442,7 +464,7 @@ namespace Win538Electors
                     8 or 9 => odds <= 1,
                     >= 10 => false,
                     _ => false
-                };
+                }; // The switchcase is meant to add a bit more difficulty, and variability to the results.
                 if (winAI)
                 {
                     AIWinState(state);
@@ -451,69 +473,94 @@ namespace Win538Electors
                 {
                     PlayerWinState(state);
                 }
-                UpdateGameStatistics();
             }
+            foreach (string state in statesPlayerWon)
+            {
+                ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            }
+            foreach (string state in statesAiWon)
+            {
+                ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            }
+            UpdateGameStatistics();
         }
+        // Lists for the logging of which state is won, to seperate UI handling
+        List<string> statesPlayerWon = new List<string>();
+        List<string> statesAiWon = new List<string>();
 
+        // Give electors to player/ai depending on who wins the state.
         void PlayerWinState(string state)
         {
             player.SetElectors(electoralVotes[state]);
-            ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            statesPlayerWon.Add(state);
         }
         void AIWinState(string state)
         {
             ai.SetElectors(electoralVotes[state]);
-            ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            statesAiWon.Add(state);
         }
-
+        // Results button
         private void btnGetResults_Click(object sender, EventArgs e)
         {
             btnGetResults.Enabled = false;
             GenerateResults();
         }
-
+        // States view
         private void mnuAllStates_Click(object sender, EventArgs e)
         {
             switchedViewState = true;
             showAllStates = true;
             UpdateGameStatistics();
         }
-
         private void mnuStatesLosing_Click(object sender, EventArgs e)
         {
             switchedViewState = true;
             showAllStates = false;
             UpdateGameStatistics();
         }
-
+        // Save + Load data
         private void saveToolStripMenuItem_Click(object sender, EventArgs e)
         {
             player.SaveGame();
             ai.SaveGame();
-            FileStream fs = new FileStream("polling.dat", FileMode.Create);
-            BinaryWriter bw = new BinaryWriter(fs);
-            foreach (var state in statePolling)
+            try
             {
-                bw.Write(state.Value);
+                FileStream fs = new FileStream("polling.dat", FileMode.Create); // Polling needs to be saved independently of AI and Player, as it is in the Form1 class.
+                BinaryWriter bw = new BinaryWriter(fs);
+                foreach (var state in statePolling)
+                {
+                    bw.Write(state.Value);
+                }
+                bw.Close();
+                fs.Close();
             }
-            bw.Close();
-            fs.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             MessageBox.Show("Game saved succesfully.");
         }
-
         private void loadToolStripMenuItem_Click(object sender, EventArgs e)
         {
             player.LoadGame();
             ai.LoadGame();
-            FileStream fs = new FileStream("polling.dat", FileMode.Open);
-            BinaryReader br = new BinaryReader(fs);
-            foreach (var state in states)
+            try
             {
-                statePolling[state] = br.ReadInt32();
+                FileStream fs = new FileStream("polling.dat", FileMode.Open);
+                BinaryReader br = new BinaryReader(fs);
+                foreach (var state in states)
+                {
+                    statePolling[state] = br.ReadInt32();
+                }
+                br.Close();
+                fs.Close();
             }
-            br.Close();
-            fs.Close();
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
             UpdateGameStatistics();
+            MessageBox.Show("Save data successfully loaded.");
         }
     }
 }

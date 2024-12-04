@@ -56,6 +56,7 @@ namespace Win538Electors
                 SetFundsIncrease(donationsCount);
                 SetLatestAction($"secured ${donationsCount} of funding this turn from your {GetDonators()} donators. ({GetTurnTicker()})");
             }
+            // Increase polling for the ai based on campaigners.
             Enumerable.Range(0, GetCampaigners()).ToList().ForEach(i =>
             {
                 Random rand = new Random();
@@ -69,7 +70,7 @@ namespace Win538Electors
                 .Select(state => state.Key)
                 .ToArray();
             // Force the computer to purchase donators early game, making it more balanced.
-            if ((GetFunds() < GetCampaignCost("Rally") && GetFunds() < GetCampaignCost("Ads") && GetFunds() < GetCampaignCost("Campaigner") && GetFunds() < GetCampaignCost("Donators")) || GetDonators() < 2)
+            if ((GetFunds() < GetCampaignCost("Rally") && GetFunds() < GetCampaignCost("Ads") && GetFunds() < GetCampaignCost("Campaigner") && GetFunds() < GetCampaignCost("Donators")) || GetDonators() < 3)
             {
                 if (GetFunds() > GetCampaignCost("Donators"))
                 {
@@ -129,35 +130,49 @@ namespace Win538Electors
                 return;
             }
         }
-        public override void SaveGame()
+        public override void SaveGame() // Saves the AI data
         {
-            FileStream fs = new FileStream("ai.dat", FileMode.Create);
-            BinaryWriter bw = new BinaryWriter(fs);
-            bw.Write(GetFunds());
-            bw.Write(GetCampaigners());
-            bw.Write(GetDonators());
-            bw.Write(GetCampaignCost("Rally"));
-            bw.Write(GetCampaignCost("Ads"));
-            bw.Write(GetCampaignCost("Campaigner"));
-            bw.Write(GetCampaignCost("Donators"));
-            bw.Write(GetDifficulty());
-            bw.Close();
-            fs.Close();
+            try
+            {
+                FileStream fs = new FileStream("ai.dat", FileMode.Create);
+                BinaryWriter bw = new BinaryWriter(fs);
+                bw.Write(GetFunds());
+                bw.Write(GetCampaigners());
+                bw.Write(GetDonators());
+                bw.Write(GetCampaignCost("Rally"));
+                bw.Write(GetCampaignCost("Ads"));
+                bw.Write(GetCampaignCost("Campaigner"));
+                bw.Write(GetCampaignCost("Donators"));
+                bw.Write(GetDifficulty());
+                bw.Close();
+                fs.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
-        public override void LoadGame()
+        public override void LoadGame() // Loads the AI data.
         {
-            FileStream fs = new FileStream("ai.dat", FileMode.Open);
-            BinaryReader br = new BinaryReader(fs);
-            this.funds = br.ReadInt32();
-            this.campaigners = br.ReadInt32();
-            this.donators = br.ReadInt32();
-            UpdateCampaignCost("Rally", br.ReadInt32());
-            UpdateCampaignCost("Ads", br.ReadInt32());
-            UpdateCampaignCost("Campaigner", br.ReadInt32());
-            UpdateCampaignCost("Donators", br.ReadInt32());
-            this.difficulty = br.ReadString();
-            br.Close();
-            fs.Close();
+            try
+            {
+                FileStream fs = new FileStream("ai.dat", FileMode.Open);
+                BinaryReader br = new BinaryReader(fs);
+                this.funds = br.ReadInt32();
+                this.campaigners = br.ReadInt32();
+                this.donators = br.ReadInt32();
+                UpdateCampaignCost("Rally", br.ReadInt32());
+                UpdateCampaignCost("Ads", br.ReadInt32());
+                UpdateCampaignCost("Campaigner", br.ReadInt32());
+                UpdateCampaignCost("Donators", br.ReadInt32());
+                this.difficulty = br.ReadString();
+                br.Close();
+                fs.Close();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
         }
     }
 }
