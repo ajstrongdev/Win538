@@ -233,7 +233,6 @@ namespace Win538Electors
             {
                 lblRaceCall.Text = "Electoral college tie.";
             }
-
         }
         private void listStates_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -414,13 +413,12 @@ namespace Win538Electors
                 listActionLogAI.Items.Add("AI: " + action);
             }
         }
-        async void GenerateResults()
+        void GenerateResults()
         {
             Random rand = new Random();
             foreach (string state in states)
             {
                 int odds = rand.Next(1, 11);
-                await Task.Delay(1000);
                 // Guarantee the AI wins if polling is -5 or below.
                 if (statePolling[state] <= -10)
                 {
@@ -451,19 +449,29 @@ namespace Win538Electors
                 {
                     PlayerWinState(state);
                 }
-                UpdateGameStatistics();
             }
+            foreach (string state in statesPlayerWon)
+            {
+                ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            }
+            foreach (string state in statesAiWon)
+            {
+                ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            }
+            UpdateGameStatistics();
         }
-
+        // Lists for the logging of which state is won, to seperate UI handling
+        List<string> statesPlayerWon = new List<string>();
+        List<string> statesAiWon = new List<string>();
         void PlayerWinState(string state)
         {
             player.SetElectors(electoralVotes[state]);
-            ActionLog(true, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            statesPlayerWon.Add(state);
         }
         void AIWinState(string state)
         {
             ai.SetElectors(electoralVotes[state]);
-            ActionLog(false, $"Won {state} with its {electoralVotes[state]} electoral college votes.");
+            statesAiWon.Add(state);
         }
 
         private void btnGetResults_Click(object sender, EventArgs e)
