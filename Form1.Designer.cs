@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             listStates = new ListBox();
             lblResultsAI = new Label();
             lblResultsYou = new Label();
@@ -637,6 +638,7 @@
             Controls.Add(groupBox1);
             Controls.Add(listStates);
             Controls.Add(menuStrip1);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             MainMenuStrip = menuStrip1;
             MinimumSize = new Size(1373, 864);
             Name = "Form1";

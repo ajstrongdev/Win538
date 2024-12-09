@@ -6,6 +6,15 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <ApplicationIcon>Win538.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="Win538.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="obj\" />
+  </ItemGroup>
 
 </Project>
