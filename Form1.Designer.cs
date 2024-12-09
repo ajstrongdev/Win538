@@ -338,14 +338,14 @@
             // aboutToolStripMenuItem
             // 
             aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            aboutToolStripMenuItem.Size = new Size(224, 26);
+            aboutToolStripMenuItem.Size = new Size(133, 26);
             aboutToolStripMenuItem.Text = "About";
             // 
             // viewToolStripMenuItem
             // 
             viewToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { mnuAllStates, mnuStatesLosing });
             viewToolStripMenuItem.Name = "viewToolStripMenuItem";
-            viewToolStripMenuItem.Size = new Size(224, 26);
+            viewToolStripMenuItem.Size = new Size(133, 26);
             viewToolStripMenuItem.Text = "View";
             // 
             // mnuAllStates
@@ -366,20 +366,20 @@
             // 
             gameToolStripMenuItem.DropDownItems.AddRange(new ToolStripItem[] { saveToolStripMenuItem, loadToolStripMenuItem });
             gameToolStripMenuItem.Name = "gameToolStripMenuItem";
-            gameToolStripMenuItem.Size = new Size(224, 26);
+            gameToolStripMenuItem.Size = new Size(133, 26);
             gameToolStripMenuItem.Text = "Game";
             // 
             // saveToolStripMenuItem
             // 
             saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            saveToolStripMenuItem.Size = new Size(224, 26);
+            saveToolStripMenuItem.Size = new Size(125, 26);
             saveToolStripMenuItem.Text = "Save";
             saveToolStripMenuItem.Click += saveToolStripMenuItem_Click;
             // 
             // loadToolStripMenuItem
             // 
             loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            loadToolStripMenuItem.Size = new Size(224, 26);
+            loadToolStripMenuItem.Size = new Size(125, 26);
             loadToolStripMenuItem.Text = "Load";
             loadToolStripMenuItem.Click += loadToolStripMenuItem_Click;
             // 
@@ -640,7 +640,7 @@
             MainMenuStrip = menuStrip1;
             MinimumSize = new Size(1373, 864);
             Name = "Form1";
-            Text = "Form1";
+            Text = "Win538";
             Load += Form1_Load;
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
